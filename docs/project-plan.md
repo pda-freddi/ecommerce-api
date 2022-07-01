@@ -11,11 +11,27 @@
 
 The goal of this project is to develop a REST API for a fictional e-commerce web application using Node.js, Express and PostgreSQL.
 
-The API will provide basic functionality expected from an e-commerce app: user registration and login, order placement, product search and CRUD (Create, Read, Update, Delete) operations on products, user accounts, orders and user carts.
+The API will provide basic functionality expected from an e-commerce app: 
+
+- User registration and login.
+- Session tracking and shopping cart.
+- Product search.
+- Order placement.
+- General endpoints for CRUD (Create, Read, Update, Delete) operations on the features listed above.
+
+For simplification, it'll be assumed that payment processing is handled by a third-party and this API won't be concerned with those details.
+
+Other features that were considered and might be included in future improvements to the project are: 
+
+- User reviews for products.
+- Many-to-many relationship between products and categories for a more dynamic and pleasant experience for users while browsing the products catalog.
+- Detailed options and specifications for products (e.g. color, size, shipping options).
+- Endpoints for product inventory and product discount management.
+- Endpoints for customers to manage multiple shipping addresses and payment information.
 
 ## Implementation
 
-A PostgreSQL database will comprise the data layer of the application. The database's schema will be designed using the [SqlDBM](https://sqldbm.com/home) tool and it'll be implemented through the [pgAdmin](https://www.pgadmin.org/) client for PostgreSQL. 
+A PostgreSQL database will comprise the data layer of the application. The database's schema will be designed using the [dbdiagram.io](https://dbdiagram.io/d) tool and the database will be implemented through the [psql](https://www.postgresql.org/docs/current/app-psql.html) CLI for PostgreSQL.
 
 The application's server layer will be implemented on [Node.js](https://nodejs.org/en/) environment. [Express.js](https://expressjs.com/) will provide the server's basic routing functionality and useful middleware available for Express will provide session management ([express-session](https://expressjs.com/en/resources/middleware/session.html)) and authentication ([Passport.js](http://www.passportjs.org/)). The database integration will be handled by the [node-postgres](https://node-postgres.com/) library.
 
@@ -31,6 +47,11 @@ The [Test-Driven Development (TDD)](https://en.wikipedia.org/wiki/Test-driven_de
 
 ## Database Schema
 
+<img src="./database/database-schema.png" alt="Database schema" width=500px height=488px />
+
+[Diagram on dbdiagram.io](https://dbdiagram.io/d/62bdd5c669be0b672c77022f)
+
+[This article](https://fabric.inc/blog/ecommerce-database-design-example/) was of great help on how to design a database schema for an e-commerce application.
 
 ## API Specification
 
