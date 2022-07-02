@@ -11,12 +11,14 @@ CREATE TABLE customer (
 CREATE TABLE category (
   id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name varchar UNIQUE NOT NULL,
+  display_name varchar UNIQUE NOT NULL,
   description text
 );
 
 CREATE TABLE product (
   id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name varchar NOT NULL,
+  display_name varchar NOT NULL,
   SKU varchar UNIQUE NOT NULL,
   price numeric NOT NULL CHECK (price > 0),
   description text,

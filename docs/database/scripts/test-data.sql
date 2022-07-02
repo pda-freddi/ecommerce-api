@@ -6,30 +6,30 @@ VALUES
   ('mario.step@example.com', 'jJSUhsmaHSAIn7284cs7s', 'Mario', 'Step', '1955-12-26', '741-045-6587');
 
 -- Populating category table
-INSERT INTO category (name, description)
+INSERT INTO category (name, display_name, description)
 VALUES
-  ('Clothes', 'All kinds of fabric and styles'),
-  ('Shoes', 'For the modern human being'),
-  ('Hats', 'To avoid sunburn');
+  ('clothes', 'Clothes', 'All kinds of fabric and styles'),
+  ('shoes', 'Shoes', 'For the modern human being'),
+  ('hats', 'Hats', 'To avoid sunburn');
 
 -- Populating product table
-INSERT INTO product (name, SKU, price, in_stock, category_id)
+INSERT INTO product (name, display_name, SKU, price, in_stock, category_id)
 VALUES
-  ('Leather Jacket', 'JDFUSA54865', 89.99, DEFAULT, 1),
-  ('Cotton T-Shirt', 'GASDA71268', 39.99, DEFAULT, 1),
-  ('Pajama Pants', 'UDYAS874227', 19.99, DEFAULT, 1);
+  ('leather-jacket', 'Leather Jacket', 'JDFUSA54865', 89.99, DEFAULT, 1),
+  ('cotton-t-shirt', 'Cotton T-Shirt', 'GASDA71268', 39.99, DEFAULT, 1),
+  ('pajama-pants', 'Pajama Pants', 'UDYAS874227', 19.99, DEFAULT, 1);
 
-INSERT INTO product (name, SKU, price, in_stock, category_id)
+INSERT INTO product (name, display_name, SKU, price, in_stock, category_id)
 VALUES
-  ('Flip Flops', 'DUAYS8177821', 29.99, DEFAULT, 2),
-  ('Running Shoes', 'FUQYAS75628', 49.99, DEFAULT, 2),
-  ('Leather Boots', 'JFUYSA48595', 69.99, DEFAULT, 2);
+  ('flip-flops', 'Flip Flops', 'DUAYS8177821', 29.99, DEFAULT, 2),
+  ('running-shoes', 'Running Shoes', 'FUQYAS75628', 49.99, DEFAULT, 2),
+  ('leather-boots', 'Leather Boots', 'JFUYSA48595', 69.99, DEFAULT, 2);
 
-INSERT INTO product (name, SKU, price, in_stock, category_id)
+INSERT INTO product (name, display_name, SKU, price, in_stock, category_id)
 VALUES
-  ('Baseball Cap', 'HIDUSH83721', 15.99, DEFAULT, 3),
-  ('Sombrero', 'CSANUDAH343242', 29.99, DEFAULT, 3),
-  ('Fedora', 'SUGNA88322', 39.99, DEFAULT, 3);
+  ('baseball-cap', 'Baseball Cap', 'HIDUSH83721', 15.99, DEFAULT, 3),
+  ('sombrero', 'Sombrero', 'CSANUDAH343242', 29.99, DEFAULT, 3),
+  ('fedora', 'Fedora', 'SUGNA88322', 39.99, DEFAULT, 3);
 
 -- Initializing a session and adding items to cart
 INSERT INTO shopping_session (customer_id, total, created_at)
