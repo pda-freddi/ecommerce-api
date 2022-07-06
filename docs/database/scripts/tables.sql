@@ -56,9 +56,10 @@ CREATE TABLE order_items (
 
 CREATE TABLE shopping_session (
   id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  customer_id int NOT NULL REFERENCES customer ON DELETE CASCADE,
+  customer_id int NOT NULL UNIQUE REFERENCES customer ON DELETE CASCADE,
   total numeric DEFAULT 0,
-  created_at timestamp DEFAULT NOW()
+  created_at timestamp DEFAULT NOW(),
+  modified_at timestamp DEFAULT NOW()
 );
 
 CREATE TABLE cart_item (

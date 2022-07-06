@@ -32,8 +32,8 @@ VALUES
   ('fedora', 'Fedora', 'SUGNA88322', 39.99, DEFAULT, 3);
 
 -- Initializing a session and adding items to cart
-INSERT INTO shopping_session (customer_id, total, created_at)
-VALUES (1, DEFAULT, DEFAULT);
+INSERT INTO shopping_session (customer_id, total, created_at, modified_at)
+VALUES (1, DEFAULT, DEFAULT, DEFAULT);
 
 INSERT INTO cart_item (shopping_session_id, product_id, quantity)
 VALUES
