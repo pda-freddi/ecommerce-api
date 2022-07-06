@@ -1,0 +1,678 @@
+openapi: 3.0.1
+info:
+  title: E-commerce API
+  version: 1.0.0
+  description: >-
+    This API is an educational project designed to expose endpoints of a
+    fictional e-commerce application, allowing customers and/or applications to execute CRUD operations and interact with the store.
+  contact:
+    email: pdafreddi@gmail.com
+tags:
+  - name: Customer
+    description: Create and manage customer data
+  - name: Products
+    description: Categories and products information
+  - name: Orders
+    description: Create and manage orders
+  - name: Cart
+    description: Shopping cart operations
+paths:
+  /customer/login:
+    post:
+      tags:
+        - Customer
+      summary: Logs in and returns the authentication cookie
+      description: Returns the authentication cookie that must be sent with future requests.
+      operationId: customerLogin
+      requestBody:
+        description: JSON object containing customer e-mail and password
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      security: []
+      responses:
+        200:
+          description: >
+            Successfully authenticated.
+            The session ID is returned in a cookie named `SESSIONID`. You need to include this cookie in subsequent requests.
+          headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: SESSIONID=abcde12345; Path=/; HttpOnly
+        401:
+          description: Invalid customer e-mail or password
+  /customer/logout:
+    post:
+      tags:
+        - Customer
+      summary: Logs the customer out and ends the session
+      operationId: customerLogout
+      responses:
+        204:
+          description: Logged out successfully
+        401:
+          description: Authentication failed
+      security:
+      - cookieAuth: []
+  /customer:
+    post:
+      tags:
+      - Customer
+      summary: Creates a customer record
+      operationId: createCustomer
+      requestBody:
+        description: JSON object containing customer data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                confirmPassword:
+                  type: string
+                  format: password
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                birthDate:
+                  type: string
+                  format: date
+                phone:
+                  type: string
+      responses:
+        201: 
+          description: Customer record was created successfully
+        400:
+          description: Invalid data input. Check response body for details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      security: []
+    get:
+      tags:
+        - Customer
+      summary: Retrieves customer information
+      description: Returns a customer object.
+      operationId: getCustomer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer'
+        401:
+          description: Authentication failed
+      security:
+      - cookieAuth: []
+    put:
+      tags:
+        - Customer
+      summary: Updates customer information
+      description: Returns the updated customer object.
+      operationId: updateCustomer
+      requestBody:
+        description: JSON object with customer data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                confirmPassword:
+                  type: string
+                  format: password
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                birthDate:
+                  type: string
+                phone:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/customer'
+        400:
+          description: Invalid data input. Check response body for details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        401:
+          description: Authentication failed
+      security:
+      - cookieAuth: []
+    delete:
+      tags:
+        - Customer
+      summary: Deletes customer record
+      description: Deletes customer information from the database. Orders and cart items associated with the customer will also be deleted and the current session will be destroyed.
+      operationId: deleteCustomer
+      responses:
+        204:
+          description: Successful operation
+        401:
+          description: Authentication failed
+      security:
+      - cookieAuth: []
+  /customer/orders:
+    get:
+      tags:
+        - Customer
+      summary: Retrieves all orders associated with customer
+      description: Returns an array of order objects.
+      operationId: getCustomerOrders
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order'
+        401:
+          description: Authentication failed
+        404: 
+          description: No orders found for this customer
+      security:
+      - cookieAuth: []
+  /category:
+    get:
+      tags:
+      - Products
+      summary: Retrieves all product categories
+      description: Returns an array of category objects.
+      operationId: getCategories
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/category'
+        404:
+          description: No categories were found
+  /category/{categoryName}:
+    get:
+      tags:
+      - Products
+      summary: Retrieves products in the specified category
+      description: Returns an array of product objects associated with the category specified by the categoryName parameter.
+      operationId: getProductsByCategory
+      parameters:
+      - name: categoryName
+        in: path
+        description: name of the category to fetch products
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/product'
+        404:
+          description: No products found for the specified category name parameter
+  /product:
+    get:
+      tags:
+      - Products
+      summary: Retrieves all products
+      description: Returns an array of product objects.
+      operationId: getProducts
+      parameters:
+      - name: search
+        in: query
+        description: optional search term to match with product names
+        required: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/product'
+        404:
+          description: No products found 
+  /product/{productName}:
+    get:
+      tags:
+      - Products
+      summary: Retrieves product information by name
+      description: Returns a single product object.
+      operationId: getProductByName
+      parameters:
+      - name: productName
+        in: path
+        description: name of the product to fetch
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        404:
+          description: No product found for the specified name parameter
+  /product/{productId}:
+    get:
+      tags:
+      - Products
+      summary: Retrieves product information by ID
+      description: Returns a single product object.
+      operationId: getProductById
+      parameters:
+      - name: productId
+        in: path
+        description: ID of the product to fetch
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+        404:
+          description: No product found for the specified ID parameter
+  /order:
+    post:
+      tags:
+      - Orders
+      summary: Creates a new order
+      description: Returns the new order object. To successfully create an order, you must first add one or more items to the cart.
+      operationId: createOrder
+      requestBody:
+        description: JSON object containing shipping information for the order
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addressLine1:
+                  type: string
+                addressLine2:
+                  type: string
+                city:
+                  type: string
+                postalCode:
+                  type: string
+                country:
+                  type: string
+      responses:
+        201: 
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        400:
+          description: Invalid data input. Check response body for details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        401:
+          description: Authentication failed
+      security:
+      - cookieAuth: []
+  /order/{orderId}:
+    get:
+      tags:
+        - Orders
+      summary: Retrieves order information specified by ID
+      description: Returns a single order object.
+      operationId: getOrderById
+      parameters:
+      - name: orderId
+        in: path
+        description: Id of the order to retrieve
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/order'
+        401:
+          description: Authentication failed
+        404:
+          description: No order information found for the specified ID
+      security:
+      - cookieAuth: []
+    delete:
+      tags:
+        - Orders
+      summary: Deletes the order specified by ID
+      description: Deletes an order object. Note that only an order with a status property of `pending` can be deleted.
+      operationId: deleteOrderById
+      parameters:
+      - name: orderId
+        in: path
+        description: Id of the order to delete
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        204:
+          description: Successful operation
+        400:
+          description: The specified order does not have a status of pending and cannot be deleted
+        401:
+          description: Authentication failed
+        404:
+          description: No order found for for the specified ID
+      security:
+      - cookieAuth: []
+  /cart:
+    get:
+      tags:
+      - Cart
+      summary: Retrieves the shopping cart
+      description: Returns a cart object that contains an array of cart items.
+      operationId: getCartItems
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        401:
+          description: Authentication failed
+      security:
+      - cookieAuth: []
+    post:
+      tags:
+      - Cart
+      summary: Adds an item to the cart
+      description: Creates a new cart item and returns the updated cart object.
+      operationId: createCartItem
+      requestBody:
+        description: JSON object containing the product ID and quantity to add to the cart
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                  format: int32
+                quantity:
+                  type: integer
+                  format: int32
+      responses:
+        201:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        400:
+          description: Invalid data input. Check response body for details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        401:
+          description: Authentication failed
+      security:
+      - cookieAuth: []
+  /cart/{cartItemId}:
+    put:
+      tags:
+      - Cart
+      summary: Updates the quantity of an item in the cart
+      description: Updates the quantity of an item in the cart specified by the item ID and returns the updated cart object.
+      operationId: updateCartItem
+      parameters:
+      - name: cartItemId
+        in: path
+        description: id of the cart item to update
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        description: JSON object containing the updated quantity
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  format: int32
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        400:
+          description: Invalid data input. Check response body for details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        401:
+          description: Authentication failed
+        404:
+          description: Cannot find a cart item with the specified ID
+      security:
+      - cookieAuth: []
+    delete:
+      tags:
+      - Cart
+      summary: Deletes an item in the cart
+      description: Deletes an item in the cart specified by the item ID and returns the updated cart object.
+      operationId: deleteCartItem
+      parameters:
+      - name: cartItemId
+        in: path
+        description: id of the cart item to delete
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        401:
+          description: Authentication failed
+        404:
+          description: Cannot find a cart item with the specified ID
+      security:
+      - cookieAuth: []
+components:
+  schemas:
+    customer:
+      type: object
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthDate:
+          type: string
+        phone:
+          type: string
+    category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type: string
+    product:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        displayName:
+          type: string
+        SKU:
+          type: string
+        price:
+          type: number
+          format: float
+        description:
+          type: string
+        image:
+          type: string
+          description: URL to image
+        thumbnail:
+          type: string
+          description: URL to thumbnail
+        inStock:
+          type: boolean
+        categoryId:
+          type: integer
+          format: int32
+    order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        total:
+          type: number
+          format: float
+        status:
+          type: string
+          enum:
+            - pending
+            - processing
+            - shipped
+            - canceled
+        createdAt:
+          type: string
+          format: date-time
+        shippingAddress:
+          type: object
+          properties:
+            addressLine1:
+              type: string
+            addressLine2:
+              type: string
+            city:
+              type: string
+            postalCode:
+              type: string
+            country:
+              type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/product'
+              quantity:
+                type: integer
+                format: int32
+    cart:
+      type: object
+      properties:
+        total:
+          type: number
+          format: float
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int32
+              product:
+                $ref: '#/components/schemas/product'
+              quantity:
+                type: integer
+                format: int32
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: SESSIONID

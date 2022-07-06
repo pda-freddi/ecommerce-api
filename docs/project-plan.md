@@ -1,39 +1,39 @@
-# E-commerce REST API Project Plan
+# E-commerce RESTful API Project Plan
 
 ## Table of Contents
 1. [Summary](#summary)
 2. [Implementation](#implementation)
 3. [Development Methodology](#development-methodology)
 4. [Database Schema](#database-schema)
-5. [API Specification](#api-specification)
+5. [OpenAPI Specification](#openapi-specification)
 
 ## Summary
 
-The goal of this project is to develop a REST API for a fictional e-commerce web application using Node.js, Express and PostgreSQL.
+The goal of this project is to develop a RESTful API for a fictional e-commerce web application using Node.js, Express and PostgreSQL.
 
 The API will provide basic functionality expected from an e-commerce app: 
 
-- User registration and login.
-- Session tracking and shopping cart.
-- Product search.
-- Order placement.
-- General endpoints for CRUD (Create, Read, Update, Delete) operations on the features listed above.
+- User registration, login and data management.
+- Categories and products data discovery and retrieval.
+- Session tracking and shopping cart operations.
+- Order creation and management.
 
-For simplification, it'll be assumed that payment processing is handled by a third-party and this API won't be concerned with those details.
+For simplification, it'll be assumed that payment processing is handled by a third-party and this application won't be concerned with those details.
 
 Other features that were considered and might be included in future improvements to the project are: 
 
 - User reviews for products.
-- Many-to-many relationship between products and categories for a more dynamic and pleasant experience for users while browsing the products catalog.
+- Many-to-many relationship between products and categories.
 - Detailed options and specifications for products (e.g. color, size, shipping options).
 - Endpoints for product inventory and product discount management.
-- Endpoints for customers to manage multiple shipping addresses and payment information.
+- Endpoints for customers to manage multiple shipping addresses.
+- Administrative endpoints for categories, products, customers and orders remote data management.
 
 ## Implementation
 
 A PostgreSQL database will comprise the data layer of the application. The database's schema will be designed using the [dbdiagram.io](https://dbdiagram.io/d) tool and the database will be implemented through the [psql](https://www.postgresql.org/docs/current/app-psql.html) CLI for PostgreSQL.
 
-The application's server layer will be implemented on [Node.js](https://nodejs.org/en/) environment. [Express.js](https://expressjs.com/) will provide the server's basic routing functionality and useful middleware available for Express will provide session management ([express-session](https://expressjs.com/en/resources/middleware/session.html)) and authentication ([Passport.js](http://www.passportjs.org/)). The database integration will be handled by the [node-postgres](https://node-postgres.com/) library.
+The application's server layer will be implemented on [Node.js](https://nodejs.org/en/) environment. [Express.js](https://expressjs.com/) will provide the server's basic routing functionality and useful middleware available for Express will provide session management ([express-session](https://expressjs.com/en/resources/middleware/session.html)) and authentication ([Passport.js](http://www.passportjs.org/)). The database integration will be handled with the [node-postgres](https://node-postgres.com/) library.
 
 Regarding the API, a design first approach will be followed for its development since it's mission critical for the proper functioning of the application and should have the expected functionality well planned upfront. The [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md) will be implemented with the help of [Swagger Editor](https://editor.swagger.io/) tool.
 
@@ -53,9 +53,11 @@ The [Test-Driven Development (TDD)](https://en.wikipedia.org/wiki/Test-driven_de
 
 [This article](https://fabric.inc/blog/ecommerce-database-design-example/) was of great help on how to design a database schema for an e-commerce application.
 
-## API Specification
+## OpenAPI Specification
 
+<img src="./api-specification/openapi-spec-preview.png" alt="OpenAPI Specification preview" width=500px height=503px />
 
+The OpenAPI Specification for this project can be found in the [openapi.yaml file](./api-specification/openapi.yaml). To interact with the specification, access [editor.swagger.io](https://editor.swagger.io/) and load the file using the "File" menu in the editor's header or copying and pasting the file's content in the editor's left pane.
 
 
 
