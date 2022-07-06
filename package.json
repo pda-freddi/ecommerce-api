@@ -1,0 +1,25 @@
+{
+  "name": "ecommerce-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Educational back-end project of a RESTful API for an e-commerce web application",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pedro-Freddi/ecommerce-api.git"
+  },
+  "author": "Pedro Freddi <pdafreddi@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pedro-Freddi/ecommerce-api/issues"
+  },
+  "homepage": "https://github.com/Pedro-Freddi/ecommerce-api#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1"
+  }
+}
