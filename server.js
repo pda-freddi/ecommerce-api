@@ -2,6 +2,8 @@
 require("dotenv").config();
 const express = require("express");
 const expressSession = require("express-session");
+const pgSession = require("connect-pg-simple")(expressSession);
+const db = require("./db/index.js");
 
 // App variables
 const PORT = process.env.PORT || 8000
@@ -18,7 +20,8 @@ const session = {
     sameSite: 'strict'
   },
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  store: new pgSession({ pool: db.pool })
 };
 
 if (app.get("env") === "production") {
@@ -32,6 +35,11 @@ app.use(expressSession(session));
 // Routes
 app.get("/", (req, res, next) => {
   res.send("Test path");
+});
+
+app.get("/customer/:id", async (req, res, next) => {
+  const result = await db.query("SELECT * FROM customer WHERE id = $1", [req.params.id]);
+  res.json(result.rows);
 });
 
 // App start
