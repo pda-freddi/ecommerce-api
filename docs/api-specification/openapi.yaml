@@ -42,12 +42,12 @@ paths:
         200:
           description: >
             Successfully authenticated.
-            The session ID is returned in a cookie named `SESSIONID`. You need to include this cookie in subsequent requests.
+            The session ID is returned in a cookie named `connect.sid`. You need to include this cookie in subsequent requests.
           headers: 
             Set-Cookie:
               schema: 
                 type: string
-                example: SESSIONID=abcde12345; Path=/; HttpOnly
+                example: connect.sid=abcde12345; Path=/; HttpOnly
         401:
           description: Invalid customer e-mail or password
   /customer/logout:
@@ -675,4 +675,4 @@ components:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: SESSIONID
+      name: connect.sid
