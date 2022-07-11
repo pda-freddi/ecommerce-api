@@ -3,15 +3,16 @@ require("dotenv").config();
 const express = require("express");
 const expressSession = require("express-session");
 const pgSession = require("connect-pg-simple")(expressSession);
+const db = require("./database/index.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const db = require("./database/index.js");
-const ensureAuthentication = require("./middleware/ensureAuthentication.js");
 const passportConfig = require("./helpers/passportConfig.js");
+const customerRouter = require("./routes/customer/customer.js");
 
 // App variables
-const PORT = process.env.PORT || 8000
 const app = express();
+const PORT = process.env.PORT || 8000;
+const env = app.get("env");
 
 // Session configuration
 const session = {
@@ -28,7 +29,7 @@ const session = {
   store: new pgSession({ pool: db.pool })
 };
 
-if (app.get("env") === "production") {
+if (env === "production") {
   // Cookies must be served over HTTPS in production
   session.cookie.secure = true;
 }
@@ -43,49 +44,9 @@ passport.serializeUser(passportConfig.serializeUser);
 passport.deserializeUser(passportConfig.deserializeUser);
 
 // Routes
-app.get("/", (req, res, next) => {
-  res.send("Test path");
-});
-
-app.get("/login-success", (req, res, next) => {
-  res.send("Login was successfull")
-});
-
-app.post("/login",
-passport.authenticate('local', { failureRedirect: '/login', successRedirect: '/' }),
-(req, res, next) => {
-  res.status(200).send("Hello world");
-});
-
-app.post("/logout", ensureAuthentication, (req, res, next) => {
-  if (req.user) {
-  req.logout(err => console.log(err));
-  }
-  res.redirect('/');
-});
-
-app.get("/secret", ensureAuthentication, (req, res, next) => {
-  const user = req.user?.first_name || 'Rachel';
-  res.status(200).send('Hello there ' + user + '!' );
-});
-
-// app.get("/customer/:id", async (req, res, next) => {
-//   const result = await db.query("SELECT * FROM customer WHERE id = $1", [req.params.id]);
-//   res.json(result.rows);
-// });
-
-// Auth router
-// const authRouter = require("./routes/auth.js");
-// app.use("/auth", authRouter);
+app.use("/customer", customerRouter);
 
 // App start
 app.listen(PORT, () => {
   console.log(`Server listening on PORT ${PORT}`);
 });
-
-/*
-{
-    "email": "john.doe@example.com",
-    "password": "dJSusyNSI7568sUF&Swsuis"
-}
-*/
