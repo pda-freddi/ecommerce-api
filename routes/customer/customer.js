@@ -2,7 +2,9 @@ const express = require("express");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const ensureAuthentication = require("../../middleware/ensureAuthentication.js");
+const generateError = require("../../helpers/generateError.js");
 const queries = require("../../database/queries.js");
+
 
 const router = express.Router();
 
@@ -16,7 +18,6 @@ router.post("/logout", ensureAuthentication, (req, res, next) => {
 });
 
 router.get("/", ensureAuthentication, (req, res, next) => {
-  console.log(req.user);
   const customer = req.user;
   delete customer.id;
   res.status(200).json(customer);
@@ -28,18 +29,18 @@ router.post("/", async (req, res, next) => {
     // Check if required fields are present
     if (!newCustomer.email || !newCustomer.password || !newCustomer.confirmPassword
     || !newCustomer.firstName || !newCustomer.birthDate) {
-      return res.status(400).json({ message: "One or more required field is missing." });
+      return next(generateError(400, "One or more required field is missing."));
     }
     newCustomer.lastName = newCustomer.lastName || null;
     newCustomer.phone = newCustomer.phone || null;
     // Verify if the email is already registered
     const isCustomer = await queries.isCustomer(newCustomer.email);
     if (isCustomer) {
-      return res.status(400).json({ message: "The email provided is already registered to a customer." });
+      return next(generateError(400, "The email provided is already registered to a customer."));
     }
     // Verify if password and confirmPassword match
     if (newCustomer.password !== newCustomer.confirmPassword) {
-      return res.status(400).json({ message: "The password and confirm password fields don't match." });
+      return next(generateError(400, "The password and confirm password fields don't match."));
     }
     // Verify if email, name, birth date and phone provided are valid
     
@@ -48,16 +49,14 @@ router.post("/", async (req, res, next) => {
     newCustomer.password = passwordHash;
     delete newCustomer.confirmPassword;
 
-    const customer = await queries.createCustomer(newCustomer);
-    if (customer) {
-      res.status(201).send("Customer created successfully");
+    const createdCustomer = await queries.createCustomer(newCustomer);
+    if (createdCustomer) {
+      res.status(201).send();
     } else {
-      res.status(500).send();
+      next(generateError(500, "Failed to create customer."));
     }
   } catch(err) {
-    // To do: research error handling best practices
-    console.log(err);
-    res.status(500).send();
+    next(generateError(500, err.message));
   }
 });
 
@@ -68,18 +67,18 @@ router.put("/", async (req, res, next) => {
     // Check if required fields are present
     if (!customerInfo.email || !customerInfo.password || !customerInfo.confirmPassword
     || !customerInfo.firstName || !customerInfo.birthDate) {
-      return res.status(400).json({ message: "One or more required field is missing." });
+      return next(generateError(400, "One or more required field is missing."));
     }
     customerInfo.lastName = customerInfo.lastName || null;
     customerInfo.phone = customerInfo.phone || null;
     // Verify if the email is already registered
     const isCustomer = await queries.isCustomer(customerInfo.email);
     if (isCustomer) {
-      return res.status(400).json({ message: "The email provided is already registered to a customer." });
+      return next(generateError(400, "The email provided is already registered to a customer."));
     }
     // Verify if password and confirmPassword match
     if (customerInfo.password !== customerInfo.confirmPassword) {
-      return res.status(400).json({ message: "The password and confirm password fields don't match." });
+      return next(generateError(400, "The password and confirm password fields don't match."));
     }
     // Verify if email, name, birth date and phone provided are valid
     
@@ -92,23 +91,25 @@ router.put("/", async (req, res, next) => {
     if (updatedCustomer) {
       res.status(200).send();
     } else {
-      res.status(500).send();
+      next(generateError(500, "Failed to update customer."));
     }
   } catch(err) {
-    // To do: research error handling best practices
-    console.log(err);
-    res.status(500).send();
+    next(generateError(500, err.message));
   }
 });
 
 router.delete("/", ensureAuthentication, async (req, res, next) => {
   const customerId = req.user.id;
-  const deletedCustomer = await queries.deleteCustomerById(customerId);
-  if (deletedCustomer) {
-    req.logout(err => next(err));
-    res.status(204).send();
-  } else {
-    res.status(500).send();
+  try {
+    const deletedCustomer = await queries.deleteCustomerById(customerId);
+    if (deletedCustomer) {
+      req.logout(err => next(err));
+      res.status(204).send();
+    } else {
+      next(generateError(500, "Failed to delete customer."));
+    }
+  } catch(err) {
+    next(generateError(500, err.message));
   }
 });
 
