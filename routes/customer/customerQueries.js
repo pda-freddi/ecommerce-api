@@ -73,7 +73,7 @@ const updateCustomerById = async (customer, id) => {
 };
 
 const deleteCustomerById = async (id) => {
-  await db.query("DELETE FROM customer WHERE id = $1", [id]);
+  await db.query("DELETE FROM customer WHERE id = $1;", [id]);
   return true;
 };
 

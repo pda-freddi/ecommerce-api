@@ -9,6 +9,7 @@ const LocalStrategy = require("passport-local");
 const passportConfig = require("./helpers/passportConfig.js");
 const customerRouter = require("./routes/customer/customerRouter.js");
 const categoryRouter = require("./routes/category/categoryRouter.js");
+const productRouter = require("./routes/product/productRouter.js");
 const errorHandler = require("./middleware/errorHandler.js");
 
 // App variables
@@ -48,6 +49,7 @@ passport.deserializeUser(passportConfig.deserializeUser);
 // Routes
 app.use("/customer", customerRouter);
 app.use("/category", categoryRouter);
+app.use("/product", productRouter);
 
 // Error handling
 app.use(errorHandler);

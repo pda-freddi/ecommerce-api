@@ -300,7 +300,7 @@ paths:
                 $ref: '#/components/schemas/product'
         404:
           description: No product found for the specified name parameter.
-  /product/{productId}:
+  /product/id/{productId}:
     get:
       tags:
       - Product

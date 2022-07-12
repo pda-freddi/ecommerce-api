@@ -17,8 +17,8 @@ CREATE TABLE category (
 
 CREATE TABLE product (
   id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  name varchar NOT NULL,
-  display_name varchar NOT NULL,
+  name varchar UNIQUE NOT NULL,
+  display_name varchar UNIQUE NOT NULL,
   SKU varchar UNIQUE NOT NULL,
   price numeric NOT NULL CHECK (price > 0),
   description text,
