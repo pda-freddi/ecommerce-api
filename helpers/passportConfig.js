@@ -1,4 +1,4 @@
-const queries = require("../database/queries.js");
+const queries = require("../routes/customer/customerQueries.js");
 const bcrypt = require("bcrypt");
 
 const verifyUser = async (email, password, done) => {

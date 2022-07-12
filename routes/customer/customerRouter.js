@@ -3,7 +3,7 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const ensureAuthentication = require("../../middleware/ensureAuthentication.js");
 const generateError = require("../../helpers/generateError.js");
-const queries = require("../../database/queries.js");
+const queries = require("./customerQueries.js");
 
 
 const router = express.Router();

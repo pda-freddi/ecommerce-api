@@ -10,9 +10,11 @@ info:
 tags:
   - name: Customer
     description: Create and manage customer data
-  - name: Products
-    description: Categories and products information
-  - name: Orders
+  - name: Category
+    description: Categories information
+  - name: Product
+    description: Products information
+  - name: Order
     description: Create and manage orders
   - name: Cart
     description: Shopping cart operations
@@ -48,8 +50,10 @@ paths:
               schema: 
                 type: string
                 example: connect.sid=abcde12345; Path=/; HttpOnly
+        400:
+          description: Malformed request. Make sure the request body follows the specified schema.
         401:
-          description: Invalid customer e-mail or password
+          description: Invalid customer e-mail or password.
   /customer/logout:
     post:
       tags:
@@ -58,9 +62,9 @@ paths:
       operationId: customerLogout
       responses:
         204:
-          description: Logged out successfully
+          description: Logged out successfully.
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
       security:
       - cookieAuth: []
   /customer:
@@ -96,9 +100,9 @@ paths:
                   type: string
       responses:
         201: 
-          description: Customer record was created successfully
+          description: Customer record was created successfully.
         400:
-          description: Invalid data input. Check response body for details
+          description: Invalid data input. Check response body for details.
           content:
             application/json:
               schema:
@@ -115,20 +119,20 @@ paths:
       operationId: getCustomer
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/customer'
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
       security:
       - cookieAuth: []
     put:
       tags:
         - Customer
       summary: Updates customer information
-      description: Returns the updated customer object.
+      description: Updates an existing customer record.
       operationId: updateCustomer
       requestBody:
         description: JSON object with customer data to update
@@ -156,13 +160,9 @@ paths:
                   type: string
       responses:
         200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/customer'
+          description: Customer updated successfully.
         400:
-          description: Invalid data input. Check response body for details
+          description: Invalid data input. Check response body for details.
           content:
             application/json:
               schema:
@@ -171,20 +171,20 @@ paths:
                   message:
                     type: string
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
       security:
       - cookieAuth: []
     delete:
       tags:
         - Customer
       summary: Deletes customer record
-      description: Deletes customer information from the database. Orders and cart items associated with the customer will also be deleted and the current session will be destroyed.
+      description: Deletes customer information from the database. Orders and cart items associated with the customer will also be deleted and the current session will end.
       operationId: deleteCustomer
       responses:
         204:
-          description: Successful operation
+          description: Customer deleted successfully.
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
       security:
       - cookieAuth: []
   /customer/orders:
@@ -196,7 +196,7 @@ paths:
       operationId: getCustomerOrders
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
@@ -204,21 +204,21 @@ paths:
                 items:
                   $ref: '#/components/schemas/order'
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
         404: 
-          description: No orders found for this customer
+          description: No orders found for this customer.
       security:
       - cookieAuth: []
   /category:
     get:
       tags:
-      - Products
+      - Category
       summary: Retrieves all product categories
       description: Returns an array of category objects.
       operationId: getCategories
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
@@ -226,11 +226,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/category'
         404:
-          description: No categories were found
+          description: No categories were found.
   /category/{categoryName}:
     get:
       tags:
-      - Products
+      - Category
       summary: Retrieves products in the specified category
       description: Returns an array of product objects associated with the category specified by the categoryName parameter.
       operationId: getProductsByCategory
@@ -243,7 +243,7 @@ paths:
           type: string
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
@@ -251,11 +251,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/product'
         404:
-          description: No products found for the specified category name parameter
+          description: No products found for the specified category name parameter.
   /product:
     get:
       tags:
-      - Products
+      - Product
       summary: Retrieves all products
       description: Returns an array of product objects.
       operationId: getProducts
@@ -268,7 +268,7 @@ paths:
           type: string
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
@@ -276,11 +276,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/product'
         404:
-          description: No products found 
+          description: No products found.
   /product/{productName}:
     get:
       tags:
-      - Products
+      - Product
       summary: Retrieves product information by name
       description: Returns a single product object.
       operationId: getProductByName
@@ -293,17 +293,17 @@ paths:
           type: string
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/product'
         404:
-          description: No product found for the specified name parameter
+          description: No product found for the specified name parameter.
   /product/{productId}:
     get:
       tags:
-      - Products
+      - Product
       summary: Retrieves product information by ID
       description: Returns a single product object.
       operationId: getProductById
@@ -317,17 +317,17 @@ paths:
           format: int32
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/product'
         404:
-          description: No product found for the specified ID parameter
+          description: No product found for the specified ID parameter.
   /order:
     post:
       tags:
-      - Orders
+      - Order
       summary: Creates a new order
       description: Returns the new order object. To successfully create an order, you must first add one or more items to the cart.
       operationId: createOrder
@@ -351,13 +351,13 @@ paths:
                   type: string
       responses:
         201: 
-          description: Order created successfully
+          description: Order created successfully.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/order'
         400:
-          description: Invalid data input. Check response body for details
+          description: Invalid data input. Check response body for details.
           content:
             application/json:
               schema:
@@ -366,13 +366,13 @@ paths:
                   message:
                     type: string
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
       security:
       - cookieAuth: []
   /order/{orderId}:
     get:
       tags:
-        - Orders
+        - Order
       summary: Retrieves order information specified by ID
       description: Returns a single order object.
       operationId: getOrderById
@@ -386,20 +386,20 @@ paths:
           format: int32
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/order'
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
         404:
-          description: No order information found for the specified ID
+          description: No order information found for the specified ID.
       security:
       - cookieAuth: []
     delete:
       tags:
-        - Orders
+        - Order 
       summary: Deletes the order specified by ID
       description: Deletes an order object. Note that only an order with a status property of `pending` can be deleted.
       operationId: deleteOrderById
@@ -413,13 +413,13 @@ paths:
           format: int32
       responses:
         204:
-          description: Successful operation
+          description: Successful operation.
         400:
-          description: The specified order does not have a status of pending and cannot be deleted
+          description: The specified order does not have a status of pending and cannot be deleted.
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
         404:
-          description: No order found for for the specified ID
+          description: No order found for for the specified ID.
       security:
       - cookieAuth: []
   /cart:
@@ -431,13 +431,13 @@ paths:
       operationId: getCartItems
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/cart'
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
       security:
       - cookieAuth: []
     post:
@@ -462,13 +462,13 @@ paths:
                   format: int32
       responses:
         201:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/cart'
         400:
-          description: Invalid data input. Check response body for details
+          description: Invalid data input. Check response body for details.
           content:
             application/json:
               schema:
@@ -477,7 +477,7 @@ paths:
                   message:
                     type: string
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
       security:
       - cookieAuth: []
   /cart/{cartItemId}:
@@ -508,13 +508,13 @@ paths:
                   format: int32
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/cart'
         400:
-          description: Invalid data input. Check response body for details
+          description: Invalid data input. Check response body for details.
           content:
             application/json:
               schema:
@@ -523,9 +523,9 @@ paths:
                   message:
                     type: string
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
         404:
-          description: Cannot find a cart item with the specified ID
+          description: Cannot find a cart item with the specified ID.
       security:
       - cookieAuth: []
     delete:
@@ -544,15 +544,15 @@ paths:
           format: int32
       responses:
         200:
-          description: Successful operation
+          description: Successful operation.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/cart'
         401:
-          description: Authentication failed
+          description: Authentication failed (customer is not logged in).
         404:
-          description: Cannot find a cart item with the specified ID
+          description: Cannot find a cart item with the specified ID.
       security:
       - cookieAuth: []
 components:

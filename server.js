@@ -7,7 +7,7 @@ const db = require("./database/index.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const passportConfig = require("./helpers/passportConfig.js");
-const customerRouter = require("./routes/customer/customer.js");
+const customerRouter = require("./routes/customer/customerRouter.js");
 const errorHandler = require("./middleware/errorHandler.js");
 
 // App variables

@@ -1,4 +1,4 @@
-const db = require("./index.js");
+const db = require("../../database/index.js");
 
 const isCustomer = async (email) => {
   const { rows } = await db.query(
