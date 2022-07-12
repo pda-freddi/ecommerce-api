@@ -19,6 +19,7 @@ router.post("/logout", ensureAuthentication, (req, res, next) => {
 router.get("/", ensureAuthentication, (req, res, next) => {
   const customer = req.user;
   delete customer.id;
+  delete customer.shoppingSessionId;
   res.status(200).json(customer);
 });
 
@@ -123,11 +124,11 @@ module.exports = router;
   "confirmPassword": "spiderman123",
   "firstName": "Peter",
   "lastName": "Parker",
-  "birthDate": "09-05-1995"
+  "birthDate": "09-05-1995",
+  "phone": "487-816-8501"
 }
-
 {
-    "email": "john.doe@example.com",
-    "password": "dJSusyNSI7568sUF&Swsuis"
+  "email": "peter.parker@example.com",
+  "password": "spiderman123"
 }
 */

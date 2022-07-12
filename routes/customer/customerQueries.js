@@ -20,9 +20,20 @@ const getCustomerByEmail = async (email) => {
 
 const getCustomerById = async (id) => {
   const { rows } = await db.query(
-  "SELECT id, email, first_name, last_name, birth_date, phone FROM customer WHERE id = $1;",
-    [id]
-  );
+    `SELECT 
+      customer.id AS id, 
+      customer.email AS email, 
+      customer.first_name AS first_name,
+      customer.last_name AS last_name,
+      customer.birth_date AS birth_date,
+      customer.phone AS phone,
+      shopping_session.id AS shopping_session_id
+    FROM customer
+    INNER JOIN shopping_session
+      ON customer.id = shopping_session.customer_id
+    WHERE customer.id = $1;`,
+      [id]
+    );
   if (rows.length === 0) return false;
   // Format birth date
   const date = new Date(rows[0].birth_date);
@@ -34,25 +45,40 @@ const getCustomerById = async (id) => {
     firstName: rows[0].first_name,
     lastName: rows[0].last_name,
     birthDate: formattedBirthDate,
-    phone: rows[0].phone
+    phone: rows[0].phone,
+    shoppingSessionId: rows[0].shopping_session_id
   };
   return customer;
 };
 
 const createCustomer = async (newCustomer) => {
-  await db.query(
-    `INSERT INTO customer (email, password, first_name, last_name, birth_date, phone)
-    VALUES ($1, $2, $3, $4, $5, $6);`,
-    [
-      newCustomer.email,
-      newCustomer.password,
-      newCustomer.firstName,
-      newCustomer.lastName,
-      newCustomer.birthDate,
-      newCustomer.phone
-    ]
-  );
-  return true;
+  const client = await db.getClient();
+  try {
+    await client.query("BEGIN;");
+    const { rows } = await client.query(
+      `INSERT INTO customer (email, password, first_name, last_name, birth_date, phone)
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;`,
+      [
+        newCustomer.email,
+        newCustomer.password,
+        newCustomer.firstName,
+        newCustomer.lastName,
+        newCustomer.birthDate,
+        newCustomer.phone
+      ]
+    );
+    await client.query(
+    `INSERT INTO shopping_session (customer_id, total, created_at, modified_at)
+    VALUES ($1, DEFAULT, DEFAULT, DEFAULT);`,
+    [rows[0].id]);
+    await client.query("COMMIT;");
+    return true;
+  } catch(err) {
+    await client.query("ROLLBACK;");
+    throw err;
+  } finally {
+    client.release();
+  }
 };
 
 const updateCustomerById = async (customer, id) => {
