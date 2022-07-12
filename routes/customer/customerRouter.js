@@ -5,7 +5,6 @@ const ensureAuthentication = require("../../middleware/ensureAuthentication.js")
 const generateError = require("../../helpers/generateError.js");
 const queries = require("./customerQueries.js");
 
-
 const router = express.Router();
 
 router.post("/login", passport.authenticate('local'), (req, res, next) => {
