@@ -53,6 +53,7 @@ const getCustomerById = async (id) => {
 
 const createCustomer = async (newCustomer) => {
   const client = await db.getClient();
+  // Transaction: create customer record and a shopping session associated with it
   try {
     await client.query("BEGIN;");
     const { rows } = await client.query(
