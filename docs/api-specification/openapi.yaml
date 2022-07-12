@@ -329,7 +329,7 @@ paths:
       tags:
       - Order
       summary: Creates a new order
-      description: Returns the new order object. To successfully create an order, you must first add one or more items to the cart.
+      description: Returns the order ID. To successfully create an order, you must first add one or more items to the cart.
       operationId: createOrder
       requestBody:
         description: JSON object containing shipping information for the order
@@ -355,7 +355,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/order'
+                type: object
+                properties:
+                  orderId:
+                    type: integer
+                    format: int32
         400:
           description: Invalid data input. Check response body for details.
           content:
@@ -379,7 +383,7 @@ paths:
       parameters:
       - name: orderId
         in: path
-        description: Id of the order to retrieve
+        description: ID of the order to retrieve
         required: true
         schema:
           type: integer
@@ -401,12 +405,12 @@ paths:
       tags:
         - Order 
       summary: Deletes the order specified by ID
-      description: Deletes an order object. Note that only an order with a status property of `pending` can be deleted.
+      description: Deletes an order object. Note that only an order with a status of `pending` can be deleted.
       operationId: deleteOrderById
       parameters:
       - name: orderId
         in: path
-        description: Id of the order to delete
+        description: ID of the order to delete
         required: true
         schema:
           type: integer
@@ -415,7 +419,7 @@ paths:
         204:
           description: Successful operation.
         400:
-          description: The specified order does not have a status of pending and cannot be deleted.
+          description: The specified order is no longer pending and cannot be deleted.
         401:
           description: Authentication failed (customer is not logged in).
         404:
@@ -444,10 +448,10 @@ paths:
       tags:
       - Cart
       summary: Adds an item to the cart
-      description: Creates a new cart item and returns the updated cart object.
+      description: Creates a new cart item and updates the cart's total price.
       operationId: createCartItem
       requestBody:
-        description: JSON object containing the product ID and quantity to add to the cart
+        description: JSON object containing the product ID and quantity to add to the cart. Both fields must contain a positive whole number greater than zero.
         required: true
         content:
           application/json:
@@ -463,10 +467,6 @@ paths:
       responses:
         201:
           description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/cart'
         400:
           description: Invalid data input. Check response body for details.
           content:
@@ -485,18 +485,18 @@ paths:
       tags:
       - Cart
       summary: Updates the quantity of an item in the cart
-      description: Updates the quantity of an item in the cart specified by the item ID and returns the updated cart object.
+      description: Changes the quantity of an item in the cart specified by the item ID and updates the cart's total price.
       operationId: updateCartItem
       parameters:
       - name: cartItemId
         in: path
-        description: id of the cart item to update
+        description: ID of the cart item to update
         required: true
         schema:
           type: integer
           format: int32
       requestBody:
-        description: JSON object containing the updated quantity
+        description: JSON object containing the updated quantity. Must be a positive whole number greater than zero.
         required: true
         content:
           application/json:
@@ -509,10 +509,6 @@ paths:
       responses:
         200:
           description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/cart'
         400:
           description: Invalid data input. Check response body for details.
           content:
@@ -532,23 +528,19 @@ paths:
       tags:
       - Cart
       summary: Deletes an item in the cart
-      description: Deletes an item in the cart specified by the item ID and returns the updated cart object.
+      description: Deletes an item in the cart specified by the item ID and updates the cart's total price.
       operationId: deleteCartItem
       parameters:
       - name: cartItemId
         in: path
-        description: id of the cart item to delete
+        description: ID of the cart item to delete
         required: true
         schema:
           type: integer
           format: int32
       responses:
-        200:
+        204:
           description: Successful operation.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/cart'
         401:
           description: Authentication failed (customer is not logged in).
         404:
