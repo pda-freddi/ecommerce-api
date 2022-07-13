@@ -29,7 +29,7 @@ router.post("/", async (req, res, next) => {
     // Check if required fields are present
     if (!newCustomer.email || !newCustomer.password || !newCustomer.confirmPassword
     || !newCustomer.firstName || !newCustomer.birthDate) {
-      return next(generateError(400, "One or more required field is missing."));
+      return next(generateError(400, "Missing required field(s)."));
     }
     newCustomer.lastName = newCustomer.lastName || null;
     newCustomer.phone = newCustomer.phone || null;
@@ -67,7 +67,7 @@ router.put("/", async (req, res, next) => {
     // Check if required fields are present
     if (!customerInfo.email || !customerInfo.password || !customerInfo.confirmPassword
     || !customerInfo.firstName || !customerInfo.birthDate) {
-      return next(generateError(400, "One or more required field is missing."));
+      return next(generateError(400, "Missing required field(s)."));
     }
     customerInfo.lastName = customerInfo.lastName || null;
     customerInfo.phone = customerInfo.phone || null;

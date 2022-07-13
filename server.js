@@ -11,6 +11,7 @@ const customerRouter = require("./routes/customer/customerRouter.js");
 const categoryRouter = require("./routes/category/categoryRouter.js");
 const productRouter = require("./routes/product/productRouter.js");
 const cartRouter = require("./routes/cart/cartRouter.js");
+const orderRouter = require("./routes/order/orderRouter.js");
 const errorHandler = require("./middleware/errorHandler.js");
 
 // App variables
@@ -52,6 +53,7 @@ app.use("/customer", customerRouter);
 app.use("/category", categoryRouter);
 app.use("/product", productRouter);
 app.use("/cart", cartRouter);
+app.use("/order", orderRouter);
 
 // Error handling
 app.use(errorHandler);

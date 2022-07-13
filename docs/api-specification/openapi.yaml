@@ -397,6 +397,8 @@ paths:
                 $ref: '#/components/schemas/order'
         401:
           description: Authentication failed (customer is not logged in).
+        403:
+          description: Not authorized. Order was not created by this customer.
         404:
           description: No order information found for the specified ID.
       security:
@@ -422,6 +424,8 @@ paths:
           description: The specified order is no longer pending and cannot be deleted.
         401:
           description: Authentication failed (customer is not logged in).
+        403:
+          description: Not authorized. Order was not created by this customer.
         404:
           description: No order found for for the specified ID.
       security:
@@ -507,7 +511,7 @@ paths:
                   type: integer
                   format: int32
       responses:
-        200:
+        204:
           description: Successful operation.
         400:
           description: Invalid data input. Check response body for details.

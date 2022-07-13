@@ -46,6 +46,9 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
 });
 
 router.put("/:itemId", ensureAuthentication, async (req, res, next) => {
+  /*
+  TO DO: MUST VALIDATE IF CART ITEM BELONGS TO THE REQUESTING SHOPPING SESSION;
+  */
   // Validate itemId parameter
   const itemId = Number(req.params.itemId);
   if (!Number.isInteger(itemId) || itemId <= 0 || itemId > 100000000) {
