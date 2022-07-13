@@ -22,9 +22,9 @@ router.get("/", ensureAuthentication, async (req, res, next) => {
 router.post("/", ensureAuthentication, async (req, res, next) => {
   const shoppingSessionId = req.user.shoppingSessionId;
   const { productId, quantity } = req.body;
-  if (!Number.isInteger(productId) || productId <= 0) {
+  if (!Number.isInteger(productId) || productId <= 0 || productId > 100000000) {
     return next(generateError(400, "ProductId field is missing or has an invalid value."));
-  } else if (!Number.isInteger(quantity) || quantity <= 0) {
+  } else if (!Number.isInteger(quantity) || quantity <= 0 || quantity > 1000) {
     return next(generateError(400, "Quantity field is missing or has an invalid value."));
   }
   try {
@@ -43,6 +43,61 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
   } catch(err) {
     next(generateError(500, err.message));
   }
+});
+
+router.put("/:itemId", ensureAuthentication, async (req, res, next) => {
+  // Validate itemId parameter
+  const itemId = Number(req.params.itemId);
+  if (!Number.isInteger(itemId) || itemId <= 0 || itemId > 100000000) {
+    return next(generateError(400, "Invalid value for itemId path parameter."));
+  }
+  // Validate quantity field in the request body
+  const { quantity } = req.body;
+  if (!Number.isInteger(quantity) || quantity <= 0 || quantity > 1000) {
+    return next(generateError(400, "Quantity field is missing or has an invalid value."));
+  }
+  try {
+  // Locate item in the cart by the itemId
+  const isValidItem = await queries.isValidCartItem(itemId);
+  if (!isValidItem) {
+    return next(generateError(404, "Can't find a cart item with the ID value provided."));
+  }
+  // Update the cart
+  const updateCartItem = await queries.updateCartItemById(itemId, quantity);
+  // Returns true if operation was successful
+  if (updateCartItem) {
+    res.status(204).send();
+  } else {
+    next(generateError(500, "Something went wrong. The item was not updated."));
+  }
+  } catch(err) {
+    next(generateError(500, err.message));
+  }
+});
+
+router.delete("/:itemId", ensureAuthentication, async (req, res, next) => {
+  // Validate itemId parameter
+  const itemId = Number(req.params.itemId);
+  if (!Number.isInteger(itemId) || itemId <= 0 || itemId > 100000000) {
+    return next(generateError(400, "Invalid value for itemId path parameter."));
+  }
+  try {
+    // Locate item in the cart by the itemId
+    const isValidItem = await queries.isValidCartItem(itemId);
+    if (!isValidItem) {
+      return next(generateError(404, "Can't find a cart item with the ID value provided."));
+    }
+    // Delete the item from cart
+    const deleteCartItem = await queries.deleteCartItemById(itemId);
+    // Returns true if operation was successful
+    if (deleteCartItem) {
+      res.status(204).send();
+    } else {
+      next(generateError(500, "Something went wrong. The item was not deleted."));
+    }
+    } catch(err) {
+      next(generateError(500, err.message));
+    }
 });
 
 module.exports = router;

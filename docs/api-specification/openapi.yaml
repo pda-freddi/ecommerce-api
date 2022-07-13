@@ -27,7 +27,7 @@ paths:
       description: Returns the authentication cookie that must be sent with future requests.
       operationId: customerLogin
       requestBody:
-        description: JSON object containing customer e-mail and password
+        description: JSON object containing customer e-mail and password.
         required: true
         content:
           application/json:
@@ -74,7 +74,7 @@ paths:
       summary: Creates a customer record
       operationId: createCustomer
       requestBody:
-        description: JSON object containing customer data
+        description: JSON object containing customer data.
         required: true
         content:
           application/json:
@@ -135,7 +135,7 @@ paths:
       description: Updates an existing customer record.
       operationId: updateCustomer
       requestBody:
-        description: JSON object with customer data to update
+        description: JSON object with customer data to update.
         required: true
         content:
           application/json:
@@ -237,7 +237,7 @@ paths:
       parameters:
       - name: categoryName
         in: path
-        description: name of the category to fetch products
+        description: Name of the category to fetch products.
         required: true
         schema:
           type: string
@@ -262,7 +262,7 @@ paths:
       parameters:
       - name: search
         in: query
-        description: optional search term to match with product names
+        description: Optional search term to match with product names.
         required: false
         schema:
           type: string
@@ -287,7 +287,7 @@ paths:
       parameters:
       - name: productName
         in: path
-        description: name of the product to fetch
+        description: Name of the product to fetch.
         required: true
         schema:
           type: string
@@ -310,7 +310,7 @@ paths:
       parameters:
       - name: productId
         in: path
-        description: ID of the product to fetch
+        description: ID of the product to fetch.
         required: true
         schema:
           type: integer
@@ -332,7 +332,7 @@ paths:
       description: Returns the order ID. To successfully create an order, you must first add one or more items to the cart.
       operationId: createOrder
       requestBody:
-        description: JSON object containing shipping information for the order
+        description: JSON object containing shipping information for the order.
         required: true
         content:
           application/json:
@@ -383,7 +383,7 @@ paths:
       parameters:
       - name: orderId
         in: path
-        description: ID of the order to retrieve
+        description: ID of the order to retrieve.
         required: true
         schema:
           type: integer
@@ -410,7 +410,7 @@ paths:
       parameters:
       - name: orderId
         in: path
-        description: ID of the order to delete
+        description: ID of the order to delete.
         required: true
         schema:
           type: integer
@@ -490,7 +490,7 @@ paths:
       parameters:
       - name: cartItemId
         in: path
-        description: ID of the cart item to update
+        description: ID of the cart item to update.
         required: true
         schema:
           type: integer
@@ -533,7 +533,7 @@ paths:
       parameters:
       - name: cartItemId
         in: path
-        description: ID of the cart item to delete
+        description: ID of the cart item to delete.
         required: true
         schema:
           type: integer
