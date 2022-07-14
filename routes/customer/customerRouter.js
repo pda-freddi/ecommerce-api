@@ -8,8 +8,8 @@ const queries = require("./customerQueries.js");
 const router = express.Router();
 
 router.post("/login", passport.authenticate('local'), (req, res, next) => {
-    res.status(204).send();
-  });
+  res.status(204).send();
+});
 
 router.post("/logout", ensureAuthentication, (req, res, next) => {
   req.logout(err => {
@@ -30,14 +30,14 @@ router.get("/", ensureAuthentication, (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const newCustomer = req.body;
-    // Check if required fields are present
-    if (!newCustomer.email || !newCustomer.password || !newCustomer.confirmPassword
-    || !newCustomer.firstName || !newCustomer.birthDate) {
-      return next(generateError(400, "Missing required field(s)."));
-    }
-    newCustomer.lastName = newCustomer.lastName || null;
-    newCustomer.phone = newCustomer.phone || null;
-    try {
+  // Check if required fields are present
+  if (!newCustomer.email || !newCustomer.password || !newCustomer.confirmPassword
+  || !newCustomer.firstName || !newCustomer.birthDate) {
+    return next(generateError(400, "Missing required field(s)."));
+  }
+  newCustomer.lastName = newCustomer.lastName || null;
+  newCustomer.phone = newCustomer.phone || null;
+  try {
     // Verify if the email is already registered
     const isCustomer = await queries.isCustomer(newCustomer.email);
     if (isCustomer) {
