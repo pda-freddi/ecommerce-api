@@ -29,7 +29,26 @@ const formatCategories = (categories) => {
   });
 };
 
+const formatCustomers = (customers) => {
+  return customers.map(customer => {
+    // Format birth date
+    const date = new Date(customer.birth_date);
+    const [ year, month, day ] = [date.getFullYear(), date.getMonth(), date.getDate()];
+    const formattedBirthDate = `${year}-${month + 1}-${day}`;
+    return {
+      id: customer.id,
+      email: customer.email,
+      firstName: customer.first_name,
+      lastName: customer.last_name,
+      birthDate: formattedBirthDate,
+      phone: customer.phone,
+      shoppingSessionId: customer.shopping_session_id
+    };
+  });
+};
+
 module.exports = {
   formatProducts,
-  formatCategories
+  formatCategories,
+  formatCustomers
 }

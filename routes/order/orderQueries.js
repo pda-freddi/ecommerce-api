@@ -10,10 +10,11 @@ const createOrder = async (address, customerId, shoppingSessionId) => {
   const shoppingSession = shoppingSessionQuery[0];
 
   // Get information about the cart items of the current shopping session
-  const { rows: cartItems } = await db.query(
+  const { rows: cartItemQuery } = await db.query(
     "SELECT * FROM cart_item WHERE shopping_session_id = $1;",
     [shoppingSessionId]
   );
+  const cartItems = cartItemQuery;
 
   // Transaction:
   const client = await db.getClient();
@@ -73,28 +74,28 @@ const createOrder = async (address, customerId, shoppingSessionId) => {
 };
 
 const isValidOrder = async (orderId) => {
-  const { rows: orderQuery } = await db.query(
+  const { rows: orderDetailsQuery } = await db.query(
     "SELECT * FROM order_details WHERE id = $1",
     [orderId]
   );
-  return orderQuery.length > 0 ? true : false;
+  return orderDetailsQuery.length > 0 ? true : false;
 };
 
 const isOrderOwner = async (orderId, customerId) => {
-  const { rows: orderQuery } = await db.query(
+  const { rows: orderDetailsQuery } = await db.query(
     "SELECT customer_id FROM order_details WHERE id = $1;",
     [orderId]
   );
-  return orderQuery[0].customer_id === customerId;
+  return orderDetailsQuery[0].customer_id === customerId;
 };
 
 const getOrderById = async (orderId) => {
   // Get order details
-  const { rows: orderQuery } = await db.query(
+  const { rows: orderDetailsQuery } = await db.query(
     "SELECT * FROM order_details WHERE id = $1;",
     [orderId]
   );
-  const order = orderQuery[0];
+  const order = orderDetailsQuery[0];
 
   // Get shipping address
   const { rows: shippingAddressQuery } = await db.query(
@@ -104,13 +105,13 @@ const getOrderById = async (orderId) => {
   const shippingAddress = shippingAddressQuery[0];
 
   // Get order items
-  const { rows: orderItems } = await db.query(
+  const { rows: orderItemsQuery } = await db.query(
     "SELECT * FROM order_items WHERE order_id = $1;",
     [order.id]
   );
   // Get product details for each order item
-  const formattedItems = await Promise.all(
-    orderItems.map(async (item) => {
+  const orderItems = await Promise.all(
+    orderItemsQuery.map(async (item) => {
       const product = await getProductById(item.product_id);
       return {
         product: { ...product },
@@ -130,16 +131,16 @@ const getOrderById = async (orderId) => {
       postalCode: shippingAddress.postal_code,
       country: shippingAddress.country
     },
-    items: formattedItems
+    items: orderItems
   };
 };
 
 const getOrderStatusById = async (orderId) => {
-  const { rows: orderQuery } = await db.query(
+  const { rows: orderDetailsQuery } = await db.query(
     "SELECT status FROM order_details WHERE id = $1;",
     [orderId]
   );
-  return orderQuery[0].status;
+  return orderDetailsQuery[0].status;
 };
 
 const deleteOrderById = async (orderId) => {

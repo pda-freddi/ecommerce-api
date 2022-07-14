@@ -67,7 +67,6 @@ router.put("/:itemId", ensureAuthentication, async (req, res, next) => {
   }
   // Update the cart
   const updateCartItem = await queries.updateCartItemById(itemId, quantity);
-  // Returns true if operation was successful
   if (updateCartItem) {
     res.status(204).send();
   } else {
@@ -92,7 +91,6 @@ router.delete("/:itemId", ensureAuthentication, async (req, res, next) => {
     }
     // Delete the item from cart
     const deleteCartItem = await queries.deleteCartItemById(itemId);
-    // Returns true if operation was successful
     if (deleteCartItem) {
       res.status(204).send();
     } else {

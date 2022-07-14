@@ -8,12 +8,17 @@ const queries = require("./customerQueries.js");
 const router = express.Router();
 
 router.post("/login", passport.authenticate('local'), (req, res, next) => {
-    res.status(200).send();
+    res.status(204).send();
   });
 
 router.post("/logout", ensureAuthentication, (req, res, next) => {
-  req.logout(err => next(err));
-  res.status(204).send();
+  req.logout(err => {
+    if (err) {
+      return next(generateError(500, "Something went wrong during the logout process."));
+    } else {
+      return res.status(204).send();
+    }
+  });
 });
 
 router.get("/", ensureAuthentication, (req, res, next) => {
@@ -25,7 +30,6 @@ router.get("/", ensureAuthentication, (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const newCustomer = req.body;
-  try {
     // Check if required fields are present
     if (!newCustomer.email || !newCustomer.password || !newCustomer.confirmPassword
     || !newCustomer.firstName || !newCustomer.birthDate) {
@@ -33,6 +37,7 @@ router.post("/", async (req, res, next) => {
     }
     newCustomer.lastName = newCustomer.lastName || null;
     newCustomer.phone = newCustomer.phone || null;
+    try {
     // Verify if the email is already registered
     const isCustomer = await queries.isCustomer(newCustomer.email);
     if (isCustomer) {
@@ -49,8 +54,8 @@ router.post("/", async (req, res, next) => {
     newCustomer.password = passwordHash;
     delete newCustomer.confirmPassword;
 
-    const createdCustomer = await queries.createCustomer(newCustomer);
-    if (createdCustomer) {
+    const createCustomer = await queries.createCustomer(newCustomer);
+    if (createCustomer) {
       res.status(201).send();
     } else {
       next(generateError(500, "Failed to create customer."));
@@ -60,7 +65,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/", async (req, res, next) => {
+router.put("/", ensureAuthentication, async (req, res, next) => {
   const customerId = req.user.id;
   const customerInfo = req.body;
   try {
@@ -87,8 +92,8 @@ router.put("/", async (req, res, next) => {
     customerInfo.password = passwordHash;
     delete customerInfo.confirmPassword;
 
-    const updatedCustomer = await queries.updateCustomerById(customerInfo, customerId);
-    if (updatedCustomer) {
+    const updateCustomer = await queries.updateCustomerById(customerInfo, customerId);
+    if (updateCustomer) {
       res.status(200).send();
     } else {
       next(generateError(500, "Failed to update customer."));
@@ -101,10 +106,15 @@ router.put("/", async (req, res, next) => {
 router.delete("/", ensureAuthentication, async (req, res, next) => {
   const customerId = req.user.id;
   try {
-    const deletedCustomer = await queries.deleteCustomerById(customerId);
-    if (deletedCustomer) {
-      req.logout(err => next(err));
-      res.status(204).send();
+    const deleteCustomer = await queries.deleteCustomerById(customerId);
+    if (deleteCustomer) {
+      req.logout(err => {
+        if (err) {
+          return next(generateError(500, "Something went wrong during the logout process."));
+        } else {
+          return res.status(204).send();
+        }
+      });
     } else {
       next(generateError(500, "Failed to delete customer."));
     }

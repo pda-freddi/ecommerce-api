@@ -2,9 +2,9 @@ const db = require("../../database/index.js");
 const { formatCategories } = require("../../helpers/formatData.js");
 
 const getCategories = async () => {
-  const { rows: categories } = await db.query("SELECT * FROM category;");
-  if (categories.length === 0) return false;
-  const formattedCategories = formatCategories(categories);
+  const { rows: categoryQuery } = await db.query("SELECT * FROM category;");
+  if (categoryQuery.length === 0) return false;
+  const formattedCategories = formatCategories(categoryQuery);
   return formattedCategories;
 };
 

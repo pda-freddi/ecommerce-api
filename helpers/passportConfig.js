@@ -8,7 +8,6 @@ const verifyUser = async (email, password, done) => {
       return done(null, false);
     }
     const matchPassword = await bcrypt.compare(password, user.password);
-    // const matchPassword = password === user.password;
     if (!matchPassword) {
       return done(null, false);
     } else {

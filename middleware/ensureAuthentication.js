@@ -1,8 +1,10 @@
+const generateError = require("../helpers/generateError.js");
+
 const ensureAuthentication = (req, res, next) => {
   if (req.isAuthenticated()) {
     next();
   } else {
-    res.status(401).send();
+    next(generateError(401, "Authentication required to access this endpoint."));
   }
 };
 
