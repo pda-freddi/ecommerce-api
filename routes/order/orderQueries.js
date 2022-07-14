@@ -135,6 +135,23 @@ const getOrderById = async (orderId) => {
   };
 };
 
+
+const getOrdersByCustomerId = async (customerId) => {
+  // Get the id of each order associated with the customer
+  const { rows: orderDetailsQuery } = await db.query(
+    "SELECT id FROM order_details WHERE customer_id = $1 ORDER BY created_at DESC;",
+    [customerId]
+  );
+  if (orderDetailsQuery.length === 0) return [];
+  const ordersId = orderDetailsQuery.map(order => order.id);
+  // Iterate the query result and get full order for each orderId
+  const orders = await Promise.all(ordersId.map(async (orderId) => {
+    const order = await getOrderById(orderId);
+    return order;
+  }));
+  return orders;
+};
+
 const getOrderStatusById = async (orderId) => {
   const { rows: orderDetailsQuery } = await db.query(
     "SELECT status FROM order_details WHERE id = $1;",
@@ -153,6 +170,7 @@ module.exports = {
   isValidOrder,
   isOrderOwner,
   getOrderById,
+  getOrdersByCustomerId,
   getOrderStatusById,
   deleteOrderById
 };

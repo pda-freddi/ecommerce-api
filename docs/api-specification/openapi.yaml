@@ -41,7 +41,7 @@ paths:
                   format: password
       security: []
       responses:
-        200:
+        204:
           description: >
             Successfully authenticated.
             The session ID is returned in a cookie named `connect.sid`. You need to include this cookie in subsequent requests.
@@ -187,28 +187,6 @@ paths:
           description: Authentication failed (customer is not logged in).
       security:
       - cookieAuth: []
-  /customer/orders:
-    get:
-      tags:
-        - Customer
-      summary: Retrieves all orders associated with customer
-      description: Returns an array of order objects.
-      operationId: getCustomerOrders
-      responses:
-        200:
-          description: Successful operation.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/order'
-        401:
-          description: Authentication failed (customer is not logged in).
-        404: 
-          description: No orders found for this customer.
-      security:
-      - cookieAuth: []
   /category:
     get:
       tags:
@@ -325,6 +303,25 @@ paths:
         404:
           description: No product found for the specified ID parameter.
   /order:
+    get:
+      tags:
+        - Order
+      summary: Retrieves all orders
+      description: Returns an array of order objects or an empty array if the customer has no orders.
+      operationId: getCustomerOrders
+      responses:
+        200:
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/order'
+        401:
+          description: Authentication failed (customer is not logged in).
+      security:
+      - cookieAuth: []
     post:
       tags:
       - Order
@@ -524,6 +521,8 @@ paths:
                     type: string
         401:
           description: Authentication failed (customer is not logged in).
+        403:
+          description: Not authorized to update this cart item.
         404:
           description: Cannot find a cart item with the specified ID.
       security:
@@ -547,6 +546,8 @@ paths:
           description: Successful operation.
         401:
           description: Authentication failed (customer is not logged in).
+        403:
+          description: Not authorized to delete this cart item.
         404:
           description: Cannot find a cart item with the specified ID.
       security:

@@ -73,6 +73,14 @@ const isValidCartItem = async (itemId) => {
   return cartItemQuery.length > 0 ? true : false;
 };
 
+const isCartItemOwner = async (itemId, shoppingSessionId) => {
+  const { rows: cartItemQuery } = await db.query(
+    "SELECT id FROM cart_item WHERE id = $1 AND shopping_session_id = $2;",
+    [itemId, shoppingSessionId]
+  );
+  return cartItemQuery.length > 0 ? true : false;
+};
+
 const updateCartItemById = async (itemId, quantity) => {
   // Get cart_item
   const { rows: cartItemQuery } = await db.query("SELECT * FROM cart_item WHERE id = $1;", [itemId]);
@@ -141,6 +149,7 @@ module.exports = {
   addItemToCart,
   isProductInCart,
   isValidCartItem,
+  isCartItemOwner,
   updateCartItemById,
   deleteCartItemById
 };

@@ -6,6 +6,20 @@ const { getCart } = require("../cart/cartQueries.js");
 
 const router = express.Router();
 
+router.get("/", ensureAuthentication, async (req, res, next) => {
+  const customerId = req.user.id;
+  try {
+    const orders = await queries.getOrdersByCustomerId(customerId);
+    if (orders) {
+      res.status(200).json(orders);
+    } else {
+      next(generateError(500, "Something went wrong. Could not retrieve orders."));
+    }
+  } catch(err) {
+    next(generateError(500, err.message));
+  }
+});
+
 router.post("/", ensureAuthentication, async (req, res, next) => {
   const shoppingSessionId = req.user.shoppingSessionId;
   const customerId = req.user.id;

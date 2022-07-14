@@ -46,9 +46,6 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
 });
 
 router.put("/:itemId", ensureAuthentication, async (req, res, next) => {
-  /*
-  TO DO: MUST VALIDATE IF CART ITEM BELONGS TO THE REQUESTING SHOPPING SESSION;
-  */
   // Validate itemId parameter
   const itemId = Number(req.params.itemId);
   if (!Number.isInteger(itemId) || itemId <= 0 || itemId > 100000000) {
@@ -64,6 +61,12 @@ router.put("/:itemId", ensureAuthentication, async (req, res, next) => {
   const isValidItem = await queries.isValidCartItem(itemId);
   if (!isValidItem) {
     return next(generateError(404, "Can't find a cart item with the ID value provided."));
+  }
+  // Verify if cart item belongs to the requesting shopping session
+  const shoppingSessionId = req.user.shoppingSessionId;
+  const isCartItemOwner = await queries.isCartItemOwner(itemId, shoppingSessionId);
+  if (!isCartItemOwner) {
+    return next(generateError(403, "Not authorized to update this cart item."));
   }
   // Update the cart
   const updateCartItem = await queries.updateCartItemById(itemId, quantity);
@@ -88,6 +91,12 @@ router.delete("/:itemId", ensureAuthentication, async (req, res, next) => {
     const isValidItem = await queries.isValidCartItem(itemId);
     if (!isValidItem) {
       return next(generateError(404, "Can't find a cart item with the ID value provided."));
+    }
+    // Verify if cart item belongs to the requesting shopping session
+    const shoppingSessionId = req.user.shoppingSessionId;
+    const isCartItemOwner = await queries.isCartItemOwner(itemId, shoppingSessionId);
+    if (!isCartItemOwner) {
+      return next(generateError(403, "Not authorized to delete this cart item."));
     }
     // Delete the item from cart
     const deleteCartItem = await queries.deleteCartItemById(itemId);

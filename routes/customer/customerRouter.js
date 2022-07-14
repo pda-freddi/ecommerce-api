@@ -123,8 +123,6 @@ router.delete("/", ensureAuthentication, async (req, res, next) => {
   }
 });
 
-// To do: implement /customer/orders route
-
 module.exports = router;
 
 /*
@@ -140,5 +138,9 @@ module.exports = router;
 {
   "email": "peter.parker@example.com",
   "password": "spiderman123"
+}
+{
+  "email": "batman@example.com",
+  "password": "batman123"
 }
 */
