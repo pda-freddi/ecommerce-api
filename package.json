@@ -27,7 +27,8 @@
     "express-session": "^1.17.3",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"

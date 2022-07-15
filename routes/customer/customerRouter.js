@@ -4,12 +4,16 @@ const bcrypt = require("bcrypt");
 const ensureAuthentication = require("../../middleware/ensureAuthentication.js");
 const generateError = require("../../helpers/generateError.js");
 const queries = require("./customerQueries.js");
+const { validateLoginCredentials, 
+        validateCustomerData } = require("../../middleware/validateReqBody.js");
 
 const router = express.Router();
 
-router.post("/login", passport.authenticate('local'), (req, res, next) => {
-  res.status(204).send();
-});
+router.post("/login",
+  validateLoginCredentials,
+  passport.authenticate('local'),
+  (req, res, next) => res.status(204).send()
+);
 
 router.post("/logout", ensureAuthentication, (req, res, next) => {
   req.logout(err => {
@@ -28,33 +32,21 @@ router.get("/", ensureAuthentication, (req, res, next) => {
   res.status(200).json(customer);
 });
 
-router.post("/", async (req, res, next) => {
-  const newCustomer = req.body;
-  // Check if required fields are present
-  if (!newCustomer.email || !newCustomer.password || !newCustomer.confirmPassword
-  || !newCustomer.firstName || !newCustomer.birthDate) {
-    return next(generateError(400, "Missing required field(s)."));
-  }
-  newCustomer.lastName = newCustomer.lastName || null;
-  newCustomer.phone = newCustomer.phone || null;
+router.post("/", validateCustomerData, async (req, res, next) => {
+  const customer = req.body;
   try {
     // Verify if the email is already registered
-    const isCustomer = await queries.isCustomer(newCustomer.email);
+    const isCustomer = await queries.isCustomer(customer.email);
     if (isCustomer) {
-      return next(generateError(400, "The email provided is already registered to a customer."));
+      return next(generateError(400, "This email is already registered to a customer."));
     }
-    // Verify if password and confirmPassword match
-    if (newCustomer.password !== newCustomer.confirmPassword) {
-      return next(generateError(400, "The password and confirm password fields don't match."));
-    }
-    // Verify if email, name, birth date and phone provided are valid
-    
-    // Hash password before storing
-    const passwordHash = await bcrypt.hash(newCustomer.password, 10);
-    newCustomer.password = passwordHash;
-    delete newCustomer.confirmPassword;
 
-    const createCustomer = await queries.createCustomer(newCustomer);
+    // Hash password before storing
+    const passwordHash = await bcrypt.hash(customer.password, 10);
+    customer.password = passwordHash;
+    delete customer.confirmPassword;
+
+    const createCustomer = await queries.createCustomer(customer);
     if (createCustomer) {
       res.status(201).send();
     } else {
@@ -65,34 +57,24 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/", ensureAuthentication, async (req, res, next) => {
+router.put("/", ensureAuthentication, validateCustomerData, async (req, res, next) => {
   const customerId = req.user.id;
-  const customerInfo = req.body;
+  const customer = req.body;
   try {
-    // Check if required fields are present
-    if (!customerInfo.email || !customerInfo.password || !customerInfo.confirmPassword
-    || !customerInfo.firstName || !customerInfo.birthDate) {
-      return next(generateError(400, "Missing required field(s)."));
+    // Verify if the email is already registered to a different customer
+    if (req.user.email !== customer.email) {
+      const isCustomer = await queries.isCustomer(customer.email);
+      if (isCustomer) {
+        return next(generateError(400, "This email is already registered to a customer."));
+      }
     }
-    customerInfo.lastName = customerInfo.lastName || null;
-    customerInfo.phone = customerInfo.phone || null;
-    // Verify if the email is already registered
-    const isCustomer = await queries.isCustomer(customerInfo.email);
-    if (isCustomer) {
-      return next(generateError(400, "The email provided is already registered to a customer."));
-    }
-    // Verify if password and confirmPassword match
-    if (customerInfo.password !== customerInfo.confirmPassword) {
-      return next(generateError(400, "The password and confirm password fields don't match."));
-    }
-    // Verify if email, name, birth date and phone provided are valid
-    
-    // Hash password before storing
-    const passwordHash = await bcrypt.hash(customerInfo.password, 10);
-    customerInfo.password = passwordHash;
-    delete customerInfo.confirmPassword;
 
-    const updateCustomer = await queries.updateCustomerById(customerInfo, customerId);
+    // Hash password before storing
+    const passwordHash = await bcrypt.hash(customer.password, 10);
+    customer.password = passwordHash;
+    delete customer.confirmPassword;
+
+    const updateCustomer = await queries.updateCustomerById(customer, customerId);
     if (updateCustomer) {
       res.status(200).send();
     } else {
