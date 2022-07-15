@@ -2,6 +2,7 @@ const express = require("express");
 const categoryQueries = require("./categoryQueries.js");
 const productQueries = require("../product/productQueries.js");
 const generateError = require("../../helpers/generateError.js");
+const sanitizeString = require("../../helpers/sanitizeString.js");
 
 const router = express.Router();
 
@@ -20,8 +21,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:categoryName", async (req, res, next) => {
   try {
-    // Research path param validation
-    const categoryName = req.params.categoryName;
+    const categoryName = sanitizeString(req.params.categoryName).toLowerCase();
     const products = await productQueries.getProductsByCategoryName(categoryName);
     if (products) {
       res.status(200).json(products);

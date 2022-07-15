@@ -1,7 +1,7 @@
 const generateError = require("../helpers/generateError.js");
 const validator = require("validator");
 
-const validateLoginCredentials = async (req, res, next) => {
+const validateLoginCredentials = (req, res, next) => {
 
   const required = ["email", "password"];
 
@@ -38,7 +38,7 @@ const validateLoginCredentials = async (req, res, next) => {
   next();
 };
 
-const validateCustomerData = async (req, res, next) => {
+const validateCustomerData = (req, res, next) => {
   
   const required = ["email", "password", "confirmPassword", "firstName", "birthDate"];
   const optional = ["lastName", "phone"];
@@ -114,9 +114,9 @@ const validateCustomerData = async (req, res, next) => {
 
   // Validate phone
   if (req.body.phone) {
-    const validPhone = validator.isMobilePhone(req.body.phone, "en-US");
+    const validPhone = validator.isMobilePhone(req.body.phone, "any", { strictMode: true });
     if (!validPhone) {
-      return next(generateError(400, "Phone must be a valid US mobile phone number."));
+      return next(generateError(400, "Please provide a valid phone number in international format (e.g. +1-212-456-7890)"));
     }
   }
 
@@ -132,7 +132,60 @@ const validateCustomerData = async (req, res, next) => {
   next();
 };
 
+const validateShippingAddress = (req, res, next) => {
+  
+  const required = ["addressLine1", "city", "postalCode", "country"];
+  const optional = ["addressLine2"];
+
+  // Check for missing required fields
+  const receivedFields = Object.keys(req.body);
+  const missingRequired = [];
+  required.forEach(field => receivedFields.includes(field) ? null : missingRequired.push(field));
+  if (missingRequired.length > 0) {
+    return next(generateError(400, `Missing required field(s): ${missingRequired.join(", ")}`));
+  }
+
+  // Clear any extra keys that are not expected
+  receivedFields.forEach(field => {
+    required.includes(field) || optional.includes(field) ?
+    null : delete req.body[field];
+    });
+
+  // Validate type of values
+  const receivedEntries = Object.entries(req.body);
+  const invalidType = [];
+  receivedEntries.forEach(entry => {
+    typeof entry[1] === "string" && entry[1].length > 0 ? null : invalidType.push(entry[0]);
+  });
+  if (invalidType.length > 0) {
+    return next(generateError(
+      400,
+      `Invalid type for field(s): ${invalidType.join(", ")}. Must be a non-empty string.`
+    ));
+  }
+
+  // Validate postal code
+  const validPostalCode = validator.isPostalCode(req.body.postalCode, "any");
+  if (!validPostalCode) {
+    return next(generateError(400, "Invalid postal code."));
+  }
+
+  // Trim strings
+  req.body.addressLine1 = validator.trim(req.body.addressLine1);
+  if (req.body.addressLine2) {
+    req.body.addressLine2 = validator.trim(req.body.addressLine2);
+  }
+  req.body.city = validator.trim(req.body.city);
+  req.body.country = validator.trim(req.body.country);
+
+  // Make missing optional fields explicit in request body
+  optional.forEach(field => receivedFields.includes(field) ? null : req.body[field] = null);
+
+  next();
+};
+
 module.exports = {
   validateLoginCredentials,
-  validateCustomerData
+  validateCustomerData,
+  validateShippingAddress
 }

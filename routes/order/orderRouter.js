@@ -2,7 +2,9 @@ const express = require("express");
 const ensureAuthentication = require("../../middleware/ensureAuthentication.js");
 const queries = require("./orderQueries.js");
 const generateError = require("../../helpers/generateError.js");
+const { validateShippingAddress } = require("../../middleware/validateReqBody.js");
 const { getCart } = require("../cart/cartQueries.js");
+const validateId = require("../../helpers/validateId.js");
 
 const router = express.Router();
 
@@ -20,28 +22,10 @@ router.get("/", ensureAuthentication, async (req, res, next) => {
   }
 });
 
-router.post("/", ensureAuthentication, async (req, res, next) => {
+router.post("/", ensureAuthentication, validateShippingAddress, async (req, res, next) => {
   const shoppingSessionId = req.user.shoppingSessionId;
   const customerId = req.user.id;
   const address = req.body;
-  /*
-  TO DO: REFACTOR AND IMPROVE THE VALIDATION OF USER INPUT VALUES
-  */
-  // Validate if required fields are present
-  if (!address.addressLine1 || !address.city || !address.postalCode || !address.country) {
-      return next(generateError(400, "Missing required field(s)."));
-  }
-  // Validate if field values are of type string
-  if (typeof address.addressLine1 !== "string" || typeof address.city !== "string"
-  || typeof address.postalCode !== "string" || typeof address.country !== "string") {
-    return next(generateError(400, "All fields must be of type string."));
-  }
-  // Check optional fields
-  if (address.addressLine2 && typeof address.addressLine2 !== "string") {
-    return next(generateError(400, "All fields must be of type string."));
-  } else if (!address.addressLine2) {
-    address.addressLine2 = null;
-  }
   try {
     // Check if cart has at least one item
     const cart = await getCart(shoppingSessionId);
@@ -61,11 +45,10 @@ router.post("/", ensureAuthentication, async (req, res, next) => {
 
 router.get("/:orderId", ensureAuthentication, async (req, res, next) => {
   // Validate orderId parameter
-  const orderId = Number(req.params.orderId);
-  if (!Number.isInteger(orderId) || orderId <= 0 || orderId > 100000000) {
+  const orderId = validateId(req.params.orderId);
+  if (!orderId) {
     return next(generateError(400, "Invalid value for orderId path parameter."));
   }
-
   try {
     // Check if requested order exists
     const isValidOrder = await queries.isValidOrder(orderId);
@@ -92,8 +75,8 @@ router.get("/:orderId", ensureAuthentication, async (req, res, next) => {
 
 router.delete("/:orderId", ensureAuthentication, async (req, res, next) => {
   // Validate orderId parameter
-  const orderId = Number(req.params.orderId);
-  if (!Number.isInteger(orderId) || orderId <= 0 || orderId > 100000000) {
+  const orderId = validateId(req.params.orderId);
+  if (!orderId) {
     return next(generateError(400, "Invalid value for orderId path parameter."));
   }
   try {
