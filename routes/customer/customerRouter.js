@@ -106,23 +106,3 @@ router.delete("/", ensureAuthentication, async (req, res, next) => {
 });
 
 module.exports = router;
-
-/*
-{
-  "email": "peter.parker@example.com",
-  "password": "spiderman123",
-  "confirmPassword": "spiderman123",
-  "firstName": "Peter",
-  "lastName": "Parker",
-  "birthDate": "09-05-1995",
-  "phone": "487-816-8501"
-}
-{
-  "email": "peter.parker@example.com",
-  "password": "spiderman123"
-}
-{
-  "email": "batman@example.com",
-  "password": "batman123"
-}
-*/

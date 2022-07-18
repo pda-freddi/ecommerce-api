@@ -1,3 +1,8 @@
+/*
+This test data is only for database testing purposes and does not fully comply
+with the application's data schema and requirements.
+*/
+
 -- Creating customer records
 INSERT INTO customer (email, password, first_name, last_name, birth_date, phone)
 VALUES

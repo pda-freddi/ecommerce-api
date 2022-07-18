@@ -109,13 +109,3 @@ router.delete("/:orderId", ensureAuthentication, async (req, res, next) => {
 });
 
 module.exports = router;
-
-/*
-{
-  "addressLine1": "123 Imaginary St",
-  "addressLine2": "Might not be here",
-  "city": "Fakesville",
-  "postalCode": "054-118000",
-  "country": "Fake Land"
-}
-*/
