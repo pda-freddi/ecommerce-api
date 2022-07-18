@@ -9,9 +9,12 @@ const getProducts = async () => {
 };
 
 const getProductsByCategoryName = async (categoryName) => {
+  // Find the ID of the requested category
   const { rows: categoryQuery } = await db.query("SELECT id FROM category WHERE name = $1;", [categoryName]);
   if (categoryQuery.length === 0) return false;
   const categoryId = categoryQuery[0].id;
+
+  // Find products that match the category ID 
   const { rows: productQuery } = await db.query("SELECT * FROM product WHERE category_id = $1;", [categoryId]);
   if (productQuery.length === 0) return false;
   const formattedProducts = formatProducts(productQuery);

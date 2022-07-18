@@ -1,6 +1,7 @@
 const db = require("../../config/database.js");
 const { formatCustomers } = require("../../helpers/formatData.js");
 
+// Validates if an email address is registered to a customer
 const isCustomer = async (email) => {
   const { rows: customerQuery } = await db.query(
     "SELECT email FROM customer WHERE email = $1;",
@@ -34,7 +35,7 @@ const getCustomerById = async (id) => {
       ON customer.id = shopping_session.customer_id
     WHERE customer.id = $1;`,
       [id]
-    );
+  );
   if (customerQuery.length === 0) return false;
   const formattedCustomers = formatCustomers(customerQuery);
   return formattedCustomers[0];
@@ -63,9 +64,11 @@ const createCustomer = async (customer) => {
     [customerQuery[0].id]);
     await client.query("COMMIT;");
     return true;
+
   } catch(err) {
     await client.query("ROLLBACK;");
     throw err;
+
   } finally {
     client.release();
   }

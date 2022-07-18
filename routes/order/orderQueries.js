@@ -16,8 +16,9 @@ const createOrder = async (address, customerId, shoppingSessionId) => {
   );
   const cartItems = cartItemQuery;
 
-  // Transaction:
+  // Transaction to create the order:
   const client = await db.getClient();
+
   try {
     await client.query("BEGIN;");
 
@@ -68,11 +69,13 @@ const createOrder = async (address, customerId, shoppingSessionId) => {
   } catch(err) {
     await client.query("ROLLBACK;");
     throw err;
+
   } finally {
     client.release();
   }
 };
 
+// Check if an order exists
 const isValidOrder = async (orderId) => {
   const { rows: orderDetailsQuery } = await db.query(
     "SELECT * FROM order_details WHERE id = $1",
@@ -81,6 +84,7 @@ const isValidOrder = async (orderId) => {
   return orderDetailsQuery.length > 0 ? true : false;
 };
 
+// Check whether the order is associated with the provided customer ID
 const isOrderOwner = async (orderId, customerId) => {
   const { rows: orderDetailsQuery } = await db.query(
     "SELECT customer_id FROM order_details WHERE id = $1;",
@@ -109,7 +113,7 @@ const getOrderById = async (orderId) => {
     "SELECT * FROM order_items WHERE order_id = $1;",
     [order.id]
   );
-  // Get product details for each order item
+  // Add product details for each order item
   const orderItems = await Promise.all(
     orderItemsQuery.map(async (item) => {
       const product = await getProductById(item.product_id);
@@ -119,6 +123,7 @@ const getOrderById = async (orderId) => {
       }
     }));
 
+  // Return a formatted order object
   return {
     id: order.id,
     total: parseFloat(order.total),
@@ -135,7 +140,7 @@ const getOrderById = async (orderId) => {
   };
 };
 
-
+// Get all order associated with a specific customer ID
 const getOrdersByCustomerId = async (customerId) => {
   // Get the id of each order associated with the customer
   const { rows: orderDetailsQuery } = await db.query(
@@ -144,11 +149,13 @@ const getOrdersByCustomerId = async (customerId) => {
   );
   if (orderDetailsQuery.length === 0) return [];
   const ordersId = orderDetailsQuery.map(order => order.id);
+
   // Iterate the query result and get full order for each orderId
   const orders = await Promise.all(ordersId.map(async (orderId) => {
     const order = await getOrderById(orderId);
     return order;
   }));
+  
   return orders;
 };
 
