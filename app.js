@@ -2,11 +2,13 @@ const express = require("express");
 const expressSession = require("express-session");
 const pgSession = require("connect-pg-simple")(expressSession);
 const db = require("./config/database.js");
+const helmet = require("helmet");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const passportConfig = require("./config/passport.js");
 const apiRouter = require("./routes/index.js")
 const errorHandler = require("./middleware/errorHandler.js");
+const notFound = require("./middleware/notFound.js");
 
 // App variables
 const app = express();
@@ -14,6 +16,7 @@ const env = app.get("env");
 
 // Session configuration
 const session = {
+  name: "sessionId",
   secret: process.env.SESSION_SECRET,
   cookie: {
     path: '/',
@@ -33,6 +36,8 @@ if (env === "production") {
 }
 
 // App configuration
+app.disable("x-powered-by");
+app.use(helmet());
 app.use(express.json());
 app.use(expressSession(session));
 app.use(passport.initialize());
@@ -43,6 +48,7 @@ passport.deserializeUser(passportConfig.deserializeUser);
 
 // Api routes
 app.use("/api", apiRouter);
+app.use(notFound);
 
 // Error handling
 app.use(errorHandler);

@@ -44,12 +44,12 @@ paths:
         204:
           description: >
             Successfully authenticated.
-            The session ID is returned in a cookie named `connect.sid`. You need to include this cookie in subsequent requests.
+            The session ID is returned in a cookie named `sessionId`. You need to include this cookie in subsequent requests.
           headers: 
             Set-Cookie:
               schema: 
                 type: string
-                example: connect.sid=abcde12345; Path=/; HttpOnly
+                example: sessionId=abc123; Path=/; Expires=abc123; HttpOnly; SameSite=Strict
         400:
           description: Invalid data input. Check response body for details.
           content:
@@ -728,4 +728,4 @@ components:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: connect.sid
+      name: sessionId
