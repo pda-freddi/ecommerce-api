@@ -51,7 +51,14 @@ paths:
                 type: string
                 example: connect.sid=abcde12345; Path=/; HttpOnly
         400:
-          description: Malformed request. Make sure the request body follows the specified schema.
+          description: Invalid data input. Check response body for details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         401:
           description: Invalid customer e-mail or password.
   /customer/logout:
@@ -98,6 +105,20 @@ paths:
                   format: date
                 phone:
                   type: string
+            examples:
+              general:
+                summary: Example
+                description: The `lastName` and `phone` fields are optional. All values must be strings and should follow the formats shown in the example.
+                value: 
+                  {
+                    "email": "email@example.com",
+                    "password": "Password123!",
+                    "confirmPassword": "Password123!",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "birthDate": "1985-12-31",
+                    "phone": "+1-212-456-7890"
+                  }
       responses:
         201: 
           description: Customer record was created successfully.
@@ -158,6 +179,20 @@ paths:
                   type: string
                 phone:
                   type: string
+            examples:
+              general:
+                summary: Example
+                description: The `lastName` and `phone` fields are optional. All values must be strings and should follow the formats shown in the example.
+                value: 
+                  {
+                    "email": "email@example.com",
+                    "password": "Password123!",
+                    "confirmPassword": "Password123!",
+                    "firstName": "John",
+                    "lastName": "Doe",
+                    "birthDate": "1985-12-31",
+                    "phone": "+1-212-456-7890"
+                  }
       responses:
         200:
           description: Customer updated successfully.
@@ -346,6 +381,10 @@ paths:
                   type: string
                 country:
                   type: string
+            examples:
+              general:
+                summary: Example
+                description: The `addressLine2` field is optional.
       responses:
         201: 
           description: Order created successfully.
@@ -452,7 +491,7 @@ paths:
       description: Creates a new cart item and updates the cart's total price.
       operationId: createCartItem
       requestBody:
-        description: JSON object containing the product ID and quantity to add to the cart. Both fields must contain a positive whole number greater than zero.
+        description: JSON object containing the product ID and quantity to add to the cart.
         required: true
         content:
           application/json:
@@ -465,6 +504,15 @@ paths:
                 quantity:
                   type: integer
                   format: int32
+            examples:
+              general:
+                summary: Example
+                description: Both `productId` and `quantity` must be positive whole numbers greater than zero.
+                value:
+                  {
+                    "productId": 9,
+                    "quantity": 2
+                  }
       responses:
         201:
           description: Successful operation.
@@ -497,7 +545,7 @@ paths:
           type: integer
           format: int32
       requestBody:
-        description: JSON object containing the updated quantity. Must be a positive whole number greater than zero.
+        description: JSON object containing the updated quantity.
         required: true
         content:
           application/json:
@@ -507,6 +555,14 @@ paths:
                 quantity:
                   type: integer
                   format: int32
+            examples:
+              general:
+                summary: Example
+                description: The `quantity` field must be a positive whole number greater than zero.
+                value:
+                  {
+                    "quantity": 3
+                  }
       responses:
         204:
           description: Successful operation.
