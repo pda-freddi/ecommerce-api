@@ -1,4 +1,4 @@
-const db = require("../../database/index.js");
+const db = require("../../config/database.js");
 const { formatCustomers } = require("../../helpers/formatData.js");
 
 const isCustomer = async (email) => {

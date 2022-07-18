@@ -1,4 +1,4 @@
-const db = require("../../database/index.js");
+const db = require("../../config/database.js");
 const { formatCategories } = require("../../helpers/formatData.js");
 
 const getCategories = async () => {

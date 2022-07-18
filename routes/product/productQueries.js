@@ -1,4 +1,4 @@
-const db = require("../../database/index.js");
+const db = require("../../config/database.js");
 const { formatProducts } = require("../../helpers/formatData.js");
 
 const getProducts = async () => {

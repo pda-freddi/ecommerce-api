@@ -1,4 +1,4 @@
-/* These functions accept an array of objects (customer, product, order, etc.) and
+/* These functions accept an array of objects (customers, products, etc.) and
 format each object to match the schema provided in the API specification. */
 
 const formatProducts = (products) => {

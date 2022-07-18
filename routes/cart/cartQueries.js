@@ -1,4 +1,4 @@
-const db = require("../../database/index.js");
+const db = require("../../config/database.js");
 const { getProductById } = require("../product/productQueries.js");
 
 const getCart = async (shoppingSessionId) => {
