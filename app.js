@@ -1,3 +1,6 @@
+// Load environment variables
+require("dotenv").config({ path: "./config/.env" });
+// Load required modules
 const express = require("express");
 const expressSession = require("express-session");
 const pgSession = require("connect-pg-simple")(expressSession);

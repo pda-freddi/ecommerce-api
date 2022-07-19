@@ -1,10 +1,6 @@
-const dotenv = require("dotenv");
-
-// Load env variables
-dotenv.config({ path: "./config/.env" });
-
-// App start
+// Import app and initialize on designated PORT
 const app = require("./app.js");
+
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
