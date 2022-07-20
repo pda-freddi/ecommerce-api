@@ -168,8 +168,26 @@ const getOrderStatusById = async (orderId) => {
 };
 
 const deleteOrderById = async (orderId) => {
-  await db.query("DELETE FROM order_details WHERE id = $1;", [orderId]);
-  return true;
+  // Get the shipping address ID associated with the order
+  const { rows: orderDetailsQuery } = await db.query(
+    "SELECT shipping_address_id FROM order_details WHERE id = $1",
+    [orderId]
+  );
+  const shippingAddressId = orderDetailsQuery[0].shipping_address_id;
+  // Transaction: delete the order and the shipping address
+  const client = await db.getClient();
+  try {
+    await client.query("BEGIN;");
+    await client.query("DELETE FROM order_details WHERE id = $1;", [orderId]);
+    await client.query("DELETE FROM shipping_address WHERE id = $1;", [shippingAddressId]);
+    await client.query("COMMIT;");
+    return true;
+  } catch(err) {
+    await client.query("ROLLBACK;");
+    throw err;
+  } finally {
+    client.release();
+  }
 };
 
 module.exports = {
