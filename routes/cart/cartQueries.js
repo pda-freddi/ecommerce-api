@@ -1,3 +1,5 @@
+"use strict";
+
 const db = require("../../config/database.js");
 const { getProductById } = require("../product/productQueries.js");
 

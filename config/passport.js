@@ -1,3 +1,5 @@
+"use strict";
+
 const queries = require("../routes/customer/customerQueries.js");
 const bcrypt = require("bcrypt");
 

@@ -1,3 +1,5 @@
+"use strict";
+
 const generateError = require("../helpers/generateError.js");
 
 const ensureAuthentication = (req, res, next) => {

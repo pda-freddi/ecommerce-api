@@ -1,3 +1,5 @@
+"use strict";
+
 // Import app and initialize on designated PORT
 const app = require("./app.js");
 

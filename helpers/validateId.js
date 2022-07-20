@@ -1,3 +1,5 @@
+"use strict";
+
 /*
 This function validates an ID parameter. It expects a value that can be 
 coerced to a number. A valid ID must be a whole number greater than zero. 

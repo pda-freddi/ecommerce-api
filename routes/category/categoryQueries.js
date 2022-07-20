@@ -1,3 +1,5 @@
+"use strict";
+
 const db = require("../../config/database.js");
 const { formatCategories } = require("../../helpers/formatData.js");
 

@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require("express");
 const customerRouter = require("./customer/customerRouter.js");
 const categoryRouter = require("./category/categoryRouter.js");
