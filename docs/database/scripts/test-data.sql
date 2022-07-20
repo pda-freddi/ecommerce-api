@@ -1,5 +1,5 @@
 /*
-This test data is only for database testing purposes and does not fully comply
+This test data is only for simple database testing purposes and does not fully comply
 with the application's data schema and requirements.
 */
 

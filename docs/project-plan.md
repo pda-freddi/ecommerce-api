@@ -3,9 +3,8 @@
 ## Table of Contents
 1. [Summary](#summary)
 2. [Implementation](#implementation)
-3. [Development Methodology](#development-methodology)
-4. [Database Schema](#database-schema)
-5. [OpenAPI Specification](#openapi-specification)
+3. [Database Schema](#database-schema)
+4. [OpenAPI Specification](#openapi-specification)
 
 ## Summary
 
@@ -20,7 +19,7 @@ The API will provide basic functionality expected from an e-commerce app:
 
 For simplification, it'll be assumed that payment processing is handled by a third-party and this application won't be concerned with those details.
 
-Other features that were considered and might be included in future improvements to the project are: 
+Other features that were considered and might be included in future improvements to the project are:
 
 - User reviews for products.
 - Many-to-many relationship between products and categories.
@@ -37,17 +36,13 @@ The application's server layer will be implemented on [Node.js](https://nodejs.o
 
 Regarding the API, a design first approach will be followed for its development since it's mission critical for the proper functioning of the application and should have the expected functionality well planned upfront. The [OpenAPI specification](https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md) will be implemented with the help of [Swagger Editor](https://editor.swagger.io/) tool.
 
-For testing, [Jest](https://jestjs.io/) will be used as the general test framework and the [SuperTest](https://github.com/visionmedia/supertest) library will assist with the API endpoint testing.
+For testing, [Jest](https://jestjs.io/) will be used as the general test framework and the [SuperTest](https://github.com/visionmedia/supertest) library will assist with the API endpoint testing. Manual testing will also be performed with the [Postman](https://www.postman.com/) application.
 
 Finally, [Git](https://git-scm.com/) will be used as the project's version control system.
 
-## Development Methodology 
-
-The [Test-Driven Development (TDD)](https://en.wikipedia.org/wiki/Test-driven_development) methodology will be used in this project. While learning and practicing the writing of tests for previous projects, I gained a lot of insight into the value of testing. This project seems to be a good opportunity to leverage this experience and further practice testing on the server layer of an application.
-
 ## Database Schema
 
-<img src="./database/database-schema.png" alt="Database schema" width=500px height=488px />
+<img src="./database/database-schema.png" alt="Database schema" width=500px height=490px />
 
 [Diagram on dbdiagram.io](https://dbdiagram.io/d/62bdd5c669be0b672c77022f)
 
@@ -55,9 +50,9 @@ The [Test-Driven Development (TDD)](https://en.wikipedia.org/wiki/Test-driven_de
 
 ## OpenAPI Specification
 
-<img src="./api-specification/openapi-spec-preview.png" alt="OpenAPI Specification preview" width=500px height=503px />
+<img src="./api-specification/openapi-spec-preview.png" alt="OpenAPI Specification preview" width=500px height=405px />
 
-The OpenAPI Specification for this project can be found in the [openapi.yaml file](./api-specification/openapi.yaml). To interact with the specification, access [editor.swagger.io](https://editor.swagger.io/) and load the file using the "File" menu in the editor's header or copying and pasting the file's content in the editor's left pane.
+The OpenAPI Specification for this project is in the [openapi.yaml](./api-specification/openapi.yaml) file. To interact with the specification, access [editor.swagger.io](https://editor.swagger.io/) and load the file using the "File" menu in the editor's header or copying and pasting the file's content in the editor's left pane.
 
 
 

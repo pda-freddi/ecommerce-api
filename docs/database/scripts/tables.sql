@@ -1,3 +1,7 @@
+/*
+This script should be run by the ecommerce_admin role in the ecommerce database.
+*/
+
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO ecommerce_app;
 
