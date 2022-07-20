@@ -3,8 +3,8 @@ info:
   title: E-commerce API
   version: 1.0.0
   description: >-
-    This API is an educational project designed to expose endpoints of a
-    fictional e-commerce application, allowing customers and/or applications to execute CRUD operations and interact with the store.
+    This is an educational project. It's an API designed to expose endpoints of a
+    fictional e-commerce application, allowing customers and applications to execute CRUD operations and interact with the store.
   contact:
     email: pdafreddi@gmail.com
 tags:
@@ -275,7 +275,7 @@ paths:
       parameters:
       - name: search
         in: query
-        description: Optional search term to match with product names.
+        description: Optional search term to match with product names. Use dashes instead of spaces to separate words.
         required: false
         schema:
           type: string
@@ -335,6 +335,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/product'
+        400:
+          description: Invalid data input. Check response body for details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         404:
           description: No product found for the specified ID parameter.
   /order:
@@ -431,6 +440,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/order'
+        400:
+          description: Invalid data input. Check response body for details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         401:
           description: Authentication failed (customer is not logged in).
         403:
@@ -457,7 +475,14 @@ paths:
         204:
           description: Successful operation.
         400:
-          description: The specified order is no longer pending and cannot be deleted.
+          description: Invalid data input. Check response body for details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         401:
           description: Authentication failed (customer is not logged in).
         403:
@@ -600,6 +625,15 @@ paths:
       responses:
         204:
           description: Successful operation.
+        400:
+          description: Invalid data input. Check response body for details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         401:
           description: Authentication failed (customer is not logged in).
         403:
