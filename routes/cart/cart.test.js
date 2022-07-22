@@ -239,7 +239,7 @@ describe("Cart endpoints", () => {
         const body = {
           "quantity": 2
         };
-        const res = await request.put("/api/cart/2")
+        const res = await request.put("/api/cart/5")
                             .set("Cookie", sessionId)
                             .send(body);
         // Responds with 403 and a message
@@ -276,7 +276,7 @@ describe("Cart endpoints", () => {
 
       it("responds with 403 code if cart item does not belong to customer", async () => {
         const sessionId = await getTestCookie();
-        const res = await request.delete("/api/cart/2")
+        const res = await request.delete("/api/cart/5")
                             .set("Cookie", sessionId);
         // Responds with 403 and a message
         expect(res.status).toBe(403);

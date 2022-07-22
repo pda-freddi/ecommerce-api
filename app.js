@@ -42,6 +42,7 @@ if (env === "production") {
 
 // App configuration
 app.disable("x-powered-by");
+app.use(express.static("public"));
 app.use(helmet());
 app.use(express.json());
 app.use(expressSession(session));

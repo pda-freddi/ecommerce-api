@@ -19,7 +19,7 @@ describe("Category endpoints", () => {
 
   describe("GET /category/{categoryName}", () => {
     it("responds with an array of products contained in the category", async () => {
-      const categoryName = "clothes";
+      const categoryName = "shoes";
       const res = await request.get(`/api/category/${categoryName}`);
       // Response should be an array of product objects
       expect(res.status).toBe(200);

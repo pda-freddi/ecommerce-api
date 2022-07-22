@@ -216,7 +216,7 @@ describe("Order endpoints", () => {
 
       it("responds with 403 code if the order does not belong to the customer", async () => {
         const sessionId = await getTestCookie();
-        const res = await request.get("/api/order/1")
+        const res = await request.get("/api/order/2")
                             .set("Cookie", sessionId);
         // Responds with 403 status code and a message
         expect(res.status).toBe(403);
@@ -252,7 +252,7 @@ describe("Order endpoints", () => {
 
       it("responds with 403 code if the order does not belong to the customer", async () => {
         const sessionId = await getTestCookie();
-        const res = await request.delete("/api/order/1")
+        const res = await request.delete("/api/order/2")
                             .set("Cookie", sessionId);
         // Responds with 403 status code and a message
         expect(res.status).toBe(403);
