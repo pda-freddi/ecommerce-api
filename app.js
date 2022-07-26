@@ -35,10 +35,11 @@ const session = {
   store: new pgSession({ pool: db.pool })
 };
 
-if (env === "production") {
-  // Cookies must be served over HTTPS in production
-  session.cookie.secure = true;
-}
+// Temporarily disable secure cookies in production for testing
+// if (env === "production") {
+//   // Cookies must be served over HTTPS in production
+//   session.cookie.secure = true;
+// }
 
 // App configuration
 app.disable("x-powered-by");
