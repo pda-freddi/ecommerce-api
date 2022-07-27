@@ -52,7 +52,7 @@ Finally, [Git](https://git-scm.com/) will be used as the project's version contr
 
 <img src="./api-specification/openapi-spec-preview.png" alt="OpenAPI Specification preview" width=500px height=405px />
 
-The OpenAPI Specification for this project is in the [openapi.yaml](./api-specification/openapi.yaml) file. To interact with the specification, access [editor.swagger.io](https://editor.swagger.io/) and load the file using the "File" menu in the editor's header or copying and pasting the file's content in the editor's left pane.
+The OpenAPI Specification for this project is in the [openapi.yaml](./api-specification/openapi.yaml) file. You can read and interact with the specification in [this link](https://ecommerce-api-pdafr.herokuapp.com/api/docs/).
 
 
 

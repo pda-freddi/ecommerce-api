@@ -11,7 +11,11 @@ The API exposes endpoints that provide basic functionality expected from an e-co
 - Session tracking and shopping cart operations.
 - Order creation and management.
 
-The project's plan and documentation can be found in the [docs folder](./docs).
+The application was deployed to Heroku and is hosted at: https://ecommerce-api-pdafr.herokuapp.com/api
+
+The available endpoints and their documentation can be found [here](https://ecommerce-api-pdafr.herokuapp.com/api/docs).
+
+The project's plan and other relevant documents can be found in the [docs folder](./docs).
 
 ## Technologies
 
@@ -36,7 +40,7 @@ Libraries used for specific features:
 
 <img src="./docs/api-specification/openapi-spec-preview.png" alt="OpenAPI Specification preview" width=500px height=405px />
 
-The OpenAPI Specification for this project is in the [openapi.yaml](./docs/api-specification/openapi.yaml) file. To interact with the specification, access [editor.swagger.io](https://editor.swagger.io/) and load the file using the "File" menu in the editor's header or copying and pasting the file's content in the editor's left pane.
+The OpenAPI Specification for this project is in the [openapi.yaml](./api-specification/openapi.yaml) file. You can read and interact with the specification in [this link](https://ecommerce-api-pdafr.herokuapp.com/api/docs/).
 
 ## Database Schema
 
