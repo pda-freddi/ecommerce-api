@@ -318,6 +318,42 @@ describe("Customer endpoints", () => {
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("Please provide a valid phone number in international format (e.g. +1-212-456-7890)");
       });
+
+      it("responds with 400 code if first name is too long", async () => {
+        const customer = {
+          "email": "newcustomer158599@example.com",
+          "password": "Password123!",
+          "confirmPassword": "Password123!",
+          "firstName": "John Very Long Name That Contains More Than 100 Characters And Should Trigger an Error Because It Really Is Too Long",
+          "lastName": "Doe",
+          "birthDate": "1985-12-31",
+          "phone": "+1-212-456-7890"
+        };
+        const res = await request.post("/api/customer")
+                            .set("Content-type", "application/json")
+                            .send(customer);
+        // Responds with 400 code and a message
+        expect(res.status).toBe(400);
+        expect(res.body.message).toBe("First Name field is too long. It can contain up to 100 characters.");
+      });
+  
+      it("responds with 400 code if last name is too long", async () => {
+        const customer = {
+          "email": "newcustomer158599@example.com",
+          "password": "Password123!",
+          "confirmPassword": "Password123!",
+          "firstName": "John",
+          "lastName": "Doe Very Long Last Name That Contains More Than 100 Characters And Should Trigger an Error Because It Really Is Too Long",
+          "birthDate": "1985-12-31",
+          "phone": "+1-212-456-7890"
+        };
+        const res = await request.post("/api/customer")
+                            .set("Content-type", "application/json")
+                            .send(customer);
+        // Responds with 400 code and a message
+        expect(res.status).toBe(400);
+        expect(res.body.message).toBe("Last Name field is too long. It can contain up to 100 characters.");
+      });
     });
 
     describe("PUT /customer", () => {

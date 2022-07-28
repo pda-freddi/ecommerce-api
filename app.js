@@ -35,16 +35,15 @@ const session = {
   store: new pgSession({ pool: db.pool })
 };
 
-// Temporarily disable secure cookies in production for testing
-// if (env === "production") {
-//   // Cookies must be served over HTTPS in production
-//   session.cookie.secure = true;
-// }
+if (env === "production") {
+  // Cookies must be served over HTTPS in production
+  session.cookie.secure = true;
+}
 
 // App configuration
 app.disable("x-powered-by");
 app.use(express.static("public"));
-app.use(helmet());
+app.use(helmet(require("./config/helmet.js")));
 app.use(express.json());
 app.use(expressSession(session));
 app.use(passport.initialize());

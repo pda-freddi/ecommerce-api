@@ -125,6 +125,14 @@ const validateCustomerData = (req, res, next) => {
     }
   }
 
+  // Validate first and last name maximum length
+  if (req.body.firstName.length > 100) {
+    return next(generateError(400, "First Name field is too long. It can contain up to 100 characters."));
+  }
+  if (req.body.lastName && req.body.lastName.length > 100) {
+    return next(generateError(400, "Last Name field is too long. It can contain up to 100 characters."));
+  }
+
   // Trim first and last name
   req.body.firstName = validator.trim(req.body.firstName);
   if (req.body.lastName) {
