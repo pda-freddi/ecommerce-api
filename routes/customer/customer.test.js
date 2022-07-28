@@ -222,7 +222,26 @@ describe("Customer endpoints", () => {
                             .send(customer);
         // Responds with 400 code and a message
         expect(res.status).toBe(400);
-        expect(res.body.message).toBe("Password is too weak. Must be at least 8 characters long and contain one or more lowercase characters, uppercase characters, numbers and symbols.");
+        expect(res.body.message).toBe("Password is too weak. Must be 8-64 characters long and contain one or more lowercase characters, uppercase characters, numbers and symbols.");
+      });
+
+      it("responds with 400 code if password is too long", async () => {
+        // Password contains more than 64 characters
+        const customer = {
+          "email": "newcustomer158599@example.com",
+          "password": "ThisPasswordIsTooLongAndWillCauseAnErrorBecauseItContainsMoreThan64Characters!",
+          "confirmPassword": "ThisPasswordIsTooLongAndWillCauseAnErrorBecauseItContainsMoreThan64Characters!",
+          "firstName": "John",
+          "lastName": "Doe",
+          "birthDate": "1985-12-31",
+          "phone": "+1-212-456-7890"
+        };
+        const res = await request.post("/api/customer")
+                            .set("Content-type", "application/json")
+                            .send(customer);
+        // Responds with 400 code and a message
+        expect(res.status).toBe(400);
+        expect(res.body.message).toBe("Password is too long, it must contain between 8 and 64 characters.");
       });
 
       it("responds with 400 code if customer is not 18 years old or more", async () => {

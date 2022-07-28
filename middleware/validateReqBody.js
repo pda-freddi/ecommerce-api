@@ -87,7 +87,10 @@ const validateCustomerData = (req, res, next) => {
     minSymbols: 1
   });
   if (!strongPassword) {
-    return next(generateError(400, `Password is too weak. Must be at least 8 characters long and contain one or more lowercase characters, uppercase characters, numbers and symbols.`));
+    return next(generateError(400, `Password is too weak. Must be 8-64 characters long and contain one or more lowercase characters, uppercase characters, numbers and symbols.`));
+  }
+  if (req.body.password.length > 64) {
+    return next(generateError(400, `Password is too long, it must contain between 8 and 64 characters.`));
   }
 
   // Validate password and confirmPassword fields
