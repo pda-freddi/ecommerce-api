@@ -3,7 +3,6 @@
 const helmetOptions = {
   frameguard: { action: "deny" },
   hsts: { maxAge: 31536000, includeSubDomains: true },
-  dnsPrefetchControl: { allow: true },
   contentSecurityPolicy: { directives: { frameAncestors: ["'none'"] } }
 };
 
