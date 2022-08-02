@@ -7,6 +7,7 @@ const express = require("express");
 const expressSession = require("express-session");
 const pgSession = require("connect-pg-simple")(expressSession);
 const db = require("./config/database.js");
+const httpRedirect = require("./middleware/httpRedirect.js");
 const nocache = require("nocache");
 const helmet = require("helmet");
 const passport = require("passport");
@@ -39,6 +40,7 @@ const session = {
 // Configuration for production environment
 if (env === "production") {
   app.set('trust proxy', 1); // trust first proxy
+  app.use(httpRedirect); // set up HTTP redirect to HTTPS
   session.cookie.secure = true;   // serve cookies over HTTPS only
 }
 
