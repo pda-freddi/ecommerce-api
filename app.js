@@ -17,9 +17,10 @@ const apiRouter = require("./routes/index.js")
 const errorHandler = require("./middleware/errorHandler.js");
 const notFound = require("./middleware/notFound.js");
 
-// App variables
+// App variables and configuration
 const app = express();
 const env = app.get("env");
+app.disable("x-powered-by"); // Remove Express fingerprinting HTTP header
 
 // Session configuration
 const session = {
@@ -40,27 +41,24 @@ const session = {
 // Configuration for production environment
 if (env === "production") {
   app.set('trust proxy', 1); // trust first proxy
-  app.use(httpRedirect); // set up HTTP redirect to HTTPS
+  app.use(httpRedirect); // middleware for automatic HTTP redirect to HTTPS
   session.cookie.secure = true;   // serve cookies over HTTPS only
 }
 
 /*
 *
-*  App configuration
+*  Middleware setup and configuration
 *
 */
 
-// Remove Express fingerprinting HTTP header
-app.disable("x-powered-by");
+// Set security related HTTP headers
+app.use(helmet(require("./config/helmet.js")));
 
 // Serve static files from public directory
 app.use(express.static("public"));
 
-// Disable resource caching
+// Disable caching for api responses
 app.use(nocache());
-
-// Set security related HTTP headers
-app.use(helmet(require("./config/helmet.js")));
 
 // Parse incoming JSON request body
 app.use(express.json());
