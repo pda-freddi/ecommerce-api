@@ -11,7 +11,7 @@ The API exposes endpoints that provide basic functionality expected from an e-co
 - Session tracking and shopping cart operations.
 - Order creation and management.
 
-The application was deployed to Heroku and is hosted at: https://ecommerce-api-pdafr.herokuapp.com/api
+The application was deployed to Heroku and is hosted at: https://ecommerce-api-pdafr.herokuapp.com/
 
 The available endpoints and their documentation can be found [here](https://ecommerce-api-pdafr.herokuapp.com/api/docs).
 

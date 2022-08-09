@@ -13,6 +13,7 @@ const helmet = require("helmet");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const passportConfig = require("./config/passport.js");
+const greetingMiddleware = require("./middleware/greeting.js");
 const apiRouter = require("./routes/index.js")
 const errorHandler = require("./middleware/errorHandler.js");
 const notFound = require("./middleware/notFound.js");
@@ -77,6 +78,9 @@ passport.deserializeUser(passportConfig.deserializeUser);
 *
 *
 */
+
+// Root path route
+app.get("/", greetingMiddleware);
 
 // Api routes
 app.use("/api", apiRouter);

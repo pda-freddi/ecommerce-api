@@ -17,8 +17,4 @@ router.use("/cart", cartRouter);
 router.use("/order", orderRouter);
 router.use("/docs", docsRouter);
 
-router.get("/", (req, res) => {
-  res.send("Welcome! Check the API documentation at: https://ecommerce-api-pdafr.herokuapp.com/api/docs");
-});
-
 module.exports = router;
