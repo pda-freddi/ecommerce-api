@@ -1,17 +1,18 @@
 "use strict";
 
 const queries = require("../routes/customer/customerQueries.js");
+const generateError = require("../helpers/generateError.js");
 const bcrypt = require("bcrypt");
 
 const verifyUser = async (email, password, done) => {
   try {
     const user = await queries.getCustomerByEmail(email);
     if (!user) {
-      return done(null, false);
+      return done(generateError(401, "Invalid e-mail or password."));
     }
     const matchPassword = await bcrypt.compare(password, user.password);
     if (!matchPassword) {
-      return done(null, false);
+      return done(generateError(401, "Invalid e-mail or password."));
     } else {
       return done(null, user);
     }
