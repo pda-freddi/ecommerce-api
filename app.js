@@ -54,7 +54,7 @@ if (env === "production") {
 */
 
 // Enable CORS
-app.use(cors({ origin: "https://clothes-store-pdafr.netlify.app/", credentials: true }));
+app.use(cors({ origin: "https://clothes-store-pdafr.netlify.app", credentials: true }));
 
 // Set security related HTTP headers
 app.use(helmet(require("./config/helmet.js")));
