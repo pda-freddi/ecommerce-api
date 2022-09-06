@@ -15,6 +15,8 @@ The application was deployed to Heroku and is hosted at: https://ecommerce-api-p
 
 The available endpoints and their documentation can be found [here](https://ecommerce-api-pdafr.herokuapp.com/api/docs).
 
+You can find a client application interacting with this API [here](https://clothes-store-pdafr.netlify.app/).
+
 The project's plan and other relevant documents can be found in the [docs folder](./docs).
 
 ## Technologies
