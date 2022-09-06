@@ -3,7 +3,8 @@
 const helmetOptions = {
   frameguard: { action: "deny" },
   hsts: { maxAge: 63072000, includeSubDomains: true, preload: true },
-  contentSecurityPolicy: { directives: { frameAncestors: ["'none'"] } }
+  contentSecurityPolicy: { directives: { frameAncestors: ["'none'"] } },
+  crossOriginResourcePolicy: { policy: "cross-origin" }
 };
 
 module.exports = helmetOptions;

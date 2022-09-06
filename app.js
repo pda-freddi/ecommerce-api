@@ -9,6 +9,7 @@ const pgSession = require("connect-pg-simple")(expressSession);
 const db = require("./config/database.js");
 const httpRedirect = require("./middleware/httpRedirect.js");
 const nocache = require("nocache");
+const cors = require("cors");
 const helmet = require("helmet");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -51,6 +52,9 @@ if (env === "production") {
 *  Middleware setup and configuration
 *
 */
+
+// Enable CORS
+app.use(cors({ origin: "https://clothes-store-pdafr.netlify.app/", credentials: true }));
 
 // Set security related HTTP headers
 app.use(helmet(require("./config/helmet.js")));
