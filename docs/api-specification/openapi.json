@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://ecommerce-api-pdafr.herokuapp.com/api"
+      "url": "https://ecommerce-api-pdafr.uc.r.appspot.com/api"
     }
   ],
   "tags": [

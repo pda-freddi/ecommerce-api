@@ -52,4 +52,4 @@ Finally, [Git](https://git-scm.com/) will be used as the project's version contr
 
 <img src="./api-specification/openapi-spec-preview.png" alt="OpenAPI Specification preview" width=500px height=405px />
 
-The OpenAPI Specification for this project is in the [openapi.yaml](./api-specification/openapi.yaml) file. You can read and interact with the specification in [this link](https://ecommerce-api-pdafr.herokuapp.com/api/docs/).
+The OpenAPI Specification for this project is in the [openapi.yaml](./api-specification/openapi.yaml) file. You can read and interact with the specification in [this link](https://ecommerce-api-pdafr.uc.r.appspot.com/api/docs/).
