@@ -1,8 +1,6 @@
 # E-commerce RESTful API
 
-This project was built for Codecademy's Full Stack Engineering Path.
-
-It's a RESTful API for a fictional e-commerce web application built with Node.js, Express.js and PostgreSQL.
+This project consists of a RESTful API for a fictional e-commerce web application built with Node.js, Express.js and PostgreSQL.
 
 The API exposes endpoints that provide basic functionality expected from an e-commerce app:
 
