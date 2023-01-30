@@ -1,0 +1,114 @@
+Start date: 29/06/2022
+
+Tasks:
+- Write a plan for the project. --OK (29/06)
+
+- Design a schema for the database. --OK (01/07)
+
+- Design a specification for the API using OpenAPI and Swagger Editor. --OK (06/07)
+
+- Setup the project's repository in GitHub. --OK (06/07)
+
+- Implementation:
+ 
+  - Implement and test the database with PostgreSQL. --OK (01/07)
+
+  - Basic configuration (express setup, .env, etc.). --OK (06/07)
+
+  - Add Nodemon to the project for ease of development. --OK (07/07)
+
+  - Configure session management and session store. --OK (07/07)
+
+  - Configure body parsing middleware. --OK (08/07)
+
+  - Integrate the database with the application.  --OK (07/07)
+
+  - Implement authentication with Passport.js library. --OK (08/07)
+
+  - Implement helper functions to handle necessary database queries. --OK (13/07)
+
+  - Implement API endpoints:
+
+    - Customer routes --OK (13/07)
+    - Category routes --OK (13/07)
+    - Product routes --OK (13/07)
+    - Order routes --OK (13/07)
+    - Cart routes --OK (13/07)
+
+- Refactor code. --OK (15/07)
+
+- Implement security best-practices. --OK (18/07)
+
+- Write tests for the endpoints. --OK (20/07)
+
+- Write a readme.md for the project. --OK (20/07)
+
+- Write a self assessment on the project's development. --OK (21/07)
+
+- Populate the database with valid categories and products. --OK (22/07)
+
+- Adjust root path in OpenAPI specification to include the "/api" part and localhost. --OK (27/07)
+
+- Research how to deploy the API docs. --OK (27/07)
+
+Project Completed: 27/07/2022
+
+Test Data
+
+Customer1:
+
+{
+  "email": "testuser@example.com",
+  "password": "Test2022!",
+  "confirmPassword": "Test2022!",
+  "firstName": "Test",
+  "lastName": "User",
+  "birthDate": "2000-01-01",
+  "phone": "+1-212-456-7890"
+}
+
+Login:
+
+{
+  "email": "testuser@example.com",
+  "password": "Test2022!"
+}
+
+Customer2:
+
+{
+  "email": "testuser2@example.com",
+  "password": "Test2022!",
+  "confirmPassword": "Test2022!",
+  "firstName": "Test",
+  "lastName": "User2",
+  "birthDate": "2000-01-01",
+  "phone": "+1-212-456-7890"
+}
+
+Login:
+
+{
+  "email": "testuser2@example.com",
+  "password": "Test2022!"
+}
+
+Shipping Address:
+
+{
+  "addressLine1": "123 Imaginary St",
+  "city": "Fakesville",
+  "postalCode": "93306",
+  "country": "Fake Land"
+}
+
+Cart:
+
+{
+  "productId": 2,
+  "quantity": 1
+}
+
+{
+  "quantity": 2
+}
