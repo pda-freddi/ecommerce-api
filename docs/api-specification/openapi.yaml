@@ -8,7 +8,7 @@ info:
   contact:
     email: pdafreddi@gmail.com
 servers:
-- url: https://ecommerce-api-pdafr.uc.r.appspot.com/api
+- url: http://localhost:8000/api
 tags:
   - name: Customer
     description: Create and manage customer data

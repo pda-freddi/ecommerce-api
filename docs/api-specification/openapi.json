@@ -10,7 +10,7 @@
   },
   "servers": [
     {
-      "url": "https://ecommerce-api-pdafr.uc.r.appspot.com/api"
+      "url": "http://localhost:8000/api"
     }
   ],
   "tags": [
