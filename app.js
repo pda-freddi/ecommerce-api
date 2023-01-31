@@ -29,11 +29,11 @@ const session = {
   name: "sessionId",
   secret: process.env.SESSION_SECRET,
   cookie: {
-    path: '/',
+    path: "/",
     httpOnly: true,
     maxAge: 3600000,
     secure: false,
-    sameSite: 'none'
+    sameSite: "strict"
   },
   resave: false,
   saveUninitialized: false,
@@ -42,16 +42,16 @@ const session = {
 
 // Configuration for production environment
 if (env === "production") {
-  app.set('trust proxy', 1); // trust first proxy
+  app.set("trust proxy", 1); // trust first proxy
   app.use(httpRedirect); // middleware for automatic HTTP redirect to HTTPS
   session.cookie.secure = true;   // serve cookies over HTTPS only
 }
 
 /*
-*
-*  Middleware setup and configuration
-*
-*/
+ *
+ *  Middleware setup and configuration
+ *
+ */
 
 // Enable CORS
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
@@ -79,9 +79,9 @@ passport.serializeUser(passportConfig.serializeUser);
 passport.deserializeUser(passportConfig.deserializeUser);
 
 /* 
-*
-*
-*/
+ *
+ *
+ */
 
 // Root path route
 app.get("/", greetingMiddleware);
